@@ -6,7 +6,7 @@ import { styles } from 'styled-system';
 export const Recommend = () => {
     return (
         <Center height="100%">
-            <Text> Hello! </Text>
+            <Text> is this it? </Text>
         </Center >
 
     );

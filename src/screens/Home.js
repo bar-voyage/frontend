@@ -22,6 +22,8 @@ export const Home = ({ navigation }) => {
       >
         <Button onPress={() => navigation.navigate('Idk')}>Hello world</Button>
         <Button onPress={() => navigation.navigate('Survey')}>Survey for Vibes</Button>
+        <Button onPress={() => navigation.navigate('BarInfoScreen')}>Bar Info</Button>
+
       </Stack>
     </Center>
   );
