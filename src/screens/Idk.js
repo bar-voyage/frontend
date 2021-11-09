@@ -6,7 +6,7 @@ export const Idk = () => {
   return (
     <NativeBaseProvider>
       <Center flex={1} px="3">
-        <Box>Tap for a surprise ;)</Box>
+        <Box>Tap for a surprise ;) </Box>
         <IconButton
           icon={<Icon as={Entypo} name="emoji-happy" />}
           borderRadius="full"
