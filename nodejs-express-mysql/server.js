@@ -1,3 +1,4 @@
+const { application } = require("express");
 const express = require("express");
 const mysql = require("mysql");
 const config = require("./config");
@@ -70,6 +71,17 @@ app.get('/bars', async (req, res) => {
         // con.end();
         console.log(result);
     });
+});
+
+app.post('/register', (req, res) => {
+    console.log(req.body)
+
+    // TODO: figure out error checking for existing users 
+    res.json({ status: "posting user registration " });
+    var query = "INSERT INTO users (email, pass) VALUES (" + req.body.email + ", " + req.body.password + ");"
+    con.query(query, function (err, result) {
+        if (err) throw err;
+    })
 });
 
 module.exports = app;
