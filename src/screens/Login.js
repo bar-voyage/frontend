@@ -9,12 +9,23 @@ import {
   View,
 } from 'react-native';
 import { auth } from '../../firebase';
+import { axiosBackendInstance } from '../axios';
 
 export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const navigation = useNavigation();
+
+  axiosBackendInstance
+    .get('/users', {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    })
+    .then(response => {
+      console.log('response.data', response.data);
+    });
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
