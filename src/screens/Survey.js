@@ -39,7 +39,8 @@ export const Survey = ({ navigation }) => {
         </HStack>
       </Checkbox.Group>
 
-      <Button onPress={() => navigation.navigate('Map')}>Next</Button>
-    </Center>
+      <Button onPress={() =>
+        navigation.navigate('Map')}>Next</Button>
+    </Center >
   );
 };
