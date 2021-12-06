@@ -13,22 +13,17 @@ import { DetailsRow } from './DetailsRow';
 import { ChooseBarButton } from './ChooseBarButton';
 
 export const BarInfoComponent = props => {
-  const blurRadius = props.blurContent ? 5 : 0;
+  const { bar, blurContent, onPressChooseBar } = props;
+  const blurRadius = blurContent ? 5 : 0;
+
+  const address = `${bar.address}, ${bar.city}, ${bar.state} ${bar.zip}`;
 
   return (
     <Container>
-      <HStack width="100%">
-        <Box flex={1} alignItems="flex-end" pt={2}>
-          <ChooseBarButton onPressChooseBar={props.onPressChooseBar} />
-        </Box>
-      </HStack>
-      <VStack space={4} pb={4}>
-        <Heading>SEH</Heading>
+      <VStack space={4} pt={8} pb={4}>
+        <Heading size="xl">{bar.name}</Heading>
 
-        <DetailsRow
-          iconName="location-pin"
-          details="800 22nd St NW, Washington, DC 20052"
-        />
+        <DetailsRow iconName="location-pin" details={address} />
         <Divider my={-2} />
         <DetailsRow iconName="access-time" details="5:00PM - 3:00AM" />
         <Divider my={-2} />
@@ -41,7 +36,7 @@ export const BarInfoComponent = props => {
           iconName="attach-money"
           details="$3 tequila shots 8:40PM - close"
         />
-        <Stack space={1} alignItems="center">
+        <Stack space={1} pt={8} alignItems="center">
           <VStack space={3} alignItems="center">
             <HStack space={3}>
               <Image
@@ -82,7 +77,9 @@ export const BarInfoComponent = props => {
             </HStack>
           </VStack>
         </Stack>
-        <ChooseBarButton onPressChooseBar={props.onPressChooseBar} />
+        <Box alignItems="center" pt={8}>
+          <ChooseBarButton onPressChooseBar={onPressChooseBar} />
+        </Box>
       </VStack>
     </Container>
   );
