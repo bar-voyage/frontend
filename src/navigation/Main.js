@@ -1,37 +1,43 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Image, View, StyleSheet } from 'react-native';
 
-import { LogoutButton } from '../components/LogoutButton';
+import { HeaderMenu } from '../components/HeaderMenu';
 
 import { Login } from '../screens/Login';
-import { Home } from '../screens/Home';
-import { Idk } from '../screens/Idk';
 import { Survey } from '../screens/Survey';
 import { BarInfo } from '../screens/BarInfo';
 import { Map } from '../screens/Map';
 
 const MainStack = createStackNavigator();
 
-const noTitle = {
+const headerOptions = {
   options: {
-    title: '',
-    headerRight: () => <LogoutButton />,
+    headerTitle: () => (
+      <View>
+        <Image
+          source={require('../../assets/header-logo.png')}
+          style={styles.headerLogo}
+          alt="bar voyage header logo"
+        />
+      </View>
+    ),
+    headerRight: () => <HeaderMenu />,
   },
 };
 
+const styles = StyleSheet.create({
+  headerLogo: {
+    height: 50,
+    width: 80,
+  },
+});
+
 export const Main = () => (
-  <MainStack.Navigator
-  // screenOptions={{
-  //   headerStyle: {
-  //     backgroundColor: '#ff7f11',
-  //   },
-  // }}
-  >
-    <MainStack.Screen name="Login" component={Login} {...noTitle} />
-    <MainStack.Screen name="Home" component={Home} {...noTitle} />
-    <MainStack.Screen name="Idk" component={Idk} {...noTitle} />
-    <MainStack.Screen name="Survey" component={Survey} {...noTitle} />
-    <MainStack.Screen name="Map" component={Map} {...noTitle} />
-    <MainStack.Screen name="BarInfo" component={BarInfo} {...noTitle} />
+  <MainStack.Navigator>
+    <MainStack.Screen name="Login" component={Login} {...headerOptions} />
+    <MainStack.Screen name="Survey" component={Survey} {...headerOptions} />
+    <MainStack.Screen name="Map" component={Map} {...headerOptions} />
+    <MainStack.Screen name="BarInfo" component={BarInfo} {...headerOptions} />
   </MainStack.Navigator>
 );

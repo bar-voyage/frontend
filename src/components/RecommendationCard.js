@@ -1,8 +1,19 @@
 import React from 'react';
-import { Badge, Box, Image, HStack, VStack, Text, Spacer } from 'native-base';
+import {
+  /* Badge, */
+  Box,
+  Image,
+  HStack,
+  VStack,
+  Text,
+  Spacer,
+} from 'native-base';
+import { MaterialIcons } from '@expo/vector-icons';
 
 export const RecommendationCard = props => {
-  const { name, distance, categories, imageUrl } = props;
+  const { name, avgStars, imageUrl } = props;
+  const distance = '0.2 mi';
+
   return (
     <Box
       borderBottomWidth="1"
@@ -18,13 +29,14 @@ export const RecommendationCard = props => {
         <Image
           size="lg"
           source={{
+            // uri: 'https://www.insidehook.com/wp-content/uploads/2020/02/madams_organ.jpg?fit=1200%2C800',
             uri: imageUrl,
           }}
           alt={name}
         />
         <VStack>
           <Text
-            fontSize="md"
+            fontSize="lg"
             _dark={{
               color: 'warmGray.50',
             }}
@@ -33,17 +45,29 @@ export const RecommendationCard = props => {
             {name}
           </Text>
           <Box maxWidth="180px">
-            <HStack space={1} pt={2}>
-              {categories.map((c, i) => (
+            <HStack pt={2}>
+              {/* {categories.map((c, i) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <Badge key={i}>{c}</Badge>
-              ))}
+              ))} */}
+              {Array(avgStars)
+                .fill()
+                .map((_, i) => (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <MaterialIcons name="star" size={22} key={i} />
+                ))}
+              {Array(5 - avgStars)
+                .fill()
+                .map((_, i) => (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <MaterialIcons name="star-outline" size={22} key={i} />
+                ))}
             </HStack>
           </Box>
         </VStack>
         <Spacer />
         <Text
-          fontSize="xs"
+          fontSize="sm"
           _dark={{
             color: 'warmGray.50',
           }}

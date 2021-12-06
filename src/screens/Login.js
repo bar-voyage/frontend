@@ -3,13 +3,11 @@ import React, { useEffect, useState } from 'react';
 import {
   KeyboardAvoidingView,
   StyleSheet,
-  Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
+import { Button, Center, Heading, HStack, Text } from 'native-base';
 import { auth } from '../../firebase';
-import { axiosBackendInstance } from '../axios';
 
 export const Login = () => {
   const [email, setEmail] = useState('');
@@ -17,20 +15,10 @@ export const Login = () => {
 
   const navigation = useNavigation();
 
-  axiosBackendInstance
-    .get('/users', {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-      },
-    })
-    .then(response => {
-      console.log('response.data', response.data);
-    });
-
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
-        navigation.replace('Home');
+        navigation.replace('Survey');
       }
     });
 
@@ -58,81 +46,94 @@ export const Login = () => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="Email"
-          value={email}
-          onChangeText={text => setEmail(text)}
-          style={styles.input}
-        />
-        <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={text => setPassword(text)}
-          style={styles.input}
-          secureTextEntry
-        />
-      </View>
+    <Center>
+      <Heading size="4xl" pt={38}>
+        🍻
+      </Heading>
+      <Heading size="3xl" pb={3}>
+        Bar Voyage
+      </Heading>
+      <HStack pb={8}>
+        <Text italic>Nights out have never been better</Text>
+        <Text>😎</Text>
+      </HStack>
+      <KeyboardAvoidingView style={styles.container} behavior="padding">
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Email"
+            value={email}
+            onChangeText={text => setEmail(text)}
+            style={styles.input}
+          />
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={text => setPassword(text)}
+            style={styles.input}
+            secureTextEntry
+          />
+        </View>
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={handleLogin} style={styles.button}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={handleSignUp}
-          style={[styles.button, styles.buttonOutline]}
-        >
-          <Text style={styles.buttonOutlineText}>Register</Text>
-        </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
+        <View style={styles.buttonContainer}>
+          <Button onPress={handleLogin} style={styles.button}>
+            <Text style={styles.buttonText}>Login →</Text>
+          </Button>
+          <Button
+            onPress={handleSignUp}
+            style={[styles.button, styles.buttonOutline]}
+          >
+            <Text style={styles.buttonOutlineText}>Create account</Text>
+          </Button>
+        </View>
+      </KeyboardAvoidingView>
+    </Center>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
+    width: '80%',
+    paddingTop: 40,
   },
   inputContainer: {
-    width: '80%',
+    width: '100%',
   },
   input: {
     backgroundColor: 'white',
-    paddingHorizontal: 15,
+    paddingHorizontal: 20,
     paddingVertical: 10,
-    borderRadius: 10,
-    marginTop: 5,
+    marginTop: 10,
+    borderRadius: 20,
+    fontSize: 20,
   },
   buttonContainer: {
-    width: '60%',
+    width: '80%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 40,
+    marginTop: 50,
   },
   button: {
-    backgroundColor: '#0782F9',
     width: '100%',
-    padding: 15,
-    borderRadius: 10,
     alignItems: 'center',
   },
   buttonOutline: {
     backgroundColor: 'white',
-    marginTop: 5,
-    borderColor: '#0782F9',
+    marginTop: 10,
+    borderColor: '#2596be',
     borderWidth: 2,
   },
   buttonText: {
     color: 'white',
-    fontWeight: '700',
-    fontSize: 16,
+    fontWeight: 'bold',
+    fontSize: 20,
+    paddingVertical: 15,
   },
   buttonOutlineText: {
-    color: '#0782F9',
-    fontWeight: '700',
-    fontSize: 16,
+    color: '#2596be',
+    fontWeight: 'bold',
+    fontSize: 20,
+    paddingVertical: 15,
   },
 });
