@@ -1,17 +1,24 @@
 import React from 'react';
-import { Pressable } from 'react-native';
-import { Menu, Divider, Text } from 'native-base';
+import { Pressable, StyleSheet } from 'react-native';
+import { Menu, Divider, Text, useToast } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { auth } from '../../firebase';
 
 export const HeaderMenu = () => {
   const navigation = useNavigation();
+  const toast = useToast();
+
   const handleLogout = () => {
     auth
       .signOut()
       .then(() => {
         navigation.navigate('Login');
+        toast.show({
+          title: 'Logged out',
+          status: 'success',
+          description: 'See you later, Melody 👋',
+        });
       })
       .catch(error => alert(error.message));
   };
@@ -25,6 +32,9 @@ export const HeaderMenu = () => {
         );
       }}
     >
+      <Menu.Item isDisabled>
+        <Text style={styles.user}>🤩 &nbsp; Melody</Text>
+      </Menu.Item>
       <Menu.Item isDisabled={auth.currentUser}>
         <Pressable onPress={handleLogout}>
           <Text>Logout</Text>
@@ -40,3 +50,11 @@ export const HeaderMenu = () => {
     </Menu>
   );
 };
+
+const styles = StyleSheet.create({
+  user: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'black',
+  },
+});

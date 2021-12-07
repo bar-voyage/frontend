@@ -16,7 +16,8 @@ export const BarInfoComponent = props => {
   const { bar, blurContent, onPressChooseBar } = props;
   const blurRadius = blurContent ? 5 : 0;
 
-  const address = `${bar.address}, ${bar.city}, ${bar.state} ${bar.zip}`;
+  // const address = `${bar.address}, ${bar.city}, ${bar.state} ${bar.zip}`;
+  const address = '800 22nd St NW, Washington, DC 20052';
 
   return (
     <Container>

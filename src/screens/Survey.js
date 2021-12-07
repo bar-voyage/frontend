@@ -14,6 +14,7 @@ export const Survey = ({ navigation }) => {
   const [groupValues, setGroupValues] = React.useState([]);
   return (
     <Center height="100%">
+      <Heading size="xl">Hey Melody!</Heading>
       <Heading size="lg">What are the vibes for tonight?</Heading>
       <Checkbox.Group
         onChange={setGroupValues}

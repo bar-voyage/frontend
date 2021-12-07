@@ -9,6 +9,7 @@ import {
   HStack,
   IconButton,
   Text,
+  useToast,
 } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 import { BarInfoComponent } from '../components/barInfo/BarInfoComponent';
@@ -29,6 +30,7 @@ export const BarInfo = ({ route, navigation }) => {
     zip,
   } = route.params;
   const [showModal, setShowModal] = useState(false);
+  const toast = useToast();
 
   return (
     <Center>
@@ -108,6 +110,11 @@ export const BarInfo = ({ route, navigation }) => {
             <Button
               onPress={() => {
                 navigation.navigate('Map');
+                toast.show({
+                  title: 'Submitted',
+                  status: 'success',
+                  description: 'Thanks! We appreciate you 💛',
+                });
               }}
             >
               <Text style={styles.submitButtonText}>Submit</Text>
