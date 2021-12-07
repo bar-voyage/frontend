@@ -14,6 +14,7 @@ export const RecommendationCard = props => {
   const { name, avgStars, imageUrl } = props;
   const distance = '0.2 mi';
 
+
   return (
     <Box
       borderBottomWidth="1"

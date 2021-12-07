@@ -16,8 +16,8 @@ export const BarInfoComponent = props => {
   const { bar, blurContent, onPressChooseBar } = props;
   const blurRadius = blurContent ? 5 : 0;
 
-  // const address = `${bar.address}, ${bar.city}, ${bar.state} ${bar.zip}`;
-  const address = '800 22nd St NW, Washington, DC 20052';
+  const address = `${bar.address}, ${bar.city}, ${bar.state} ${bar.zip}`;
+  // const address = '800 22nd St NW, Washington, DC 20052';
 
   return (
     <Container>
@@ -26,7 +26,7 @@ export const BarInfoComponent = props => {
 
         <DetailsRow iconName="location-pin" details={address} />
         <Divider my={-2} />
-        <DetailsRow iconName="access-time" details="5:00PM - 3:00AM" />
+        <DetailsRow iconName="access-time" details={bar.hours} />
         <Divider my={-2} />
         <DetailsRow
           iconName="description"
