@@ -44,7 +44,6 @@ export const BarInfo = ({ route, navigation }) => {
   } = route.params;
   const [showModal, setShowModal] = useState(false);
   const toast = useToast();
-  const [rating, setRating] = useState(0);
 
   // React.useEffect(() => {
   //   postRating();
