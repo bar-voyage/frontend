@@ -45,24 +45,24 @@ export const BarInfo = ({ route, navigation }) => {
   const [showModal, setShowModal] = useState(false);
   const toast = useToast();
 
-  React.useEffect(() => {
-    postRating();
-  }, []);
+  // React.useEffect(() => {
+  //   postRating();
+  // }, []);
 
-  const postRating = () => {
-    axiosBackendInstance
-      .post('/rating', {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-        },
-      })
-      .then(response => {
-        console.log('response.data', response.data);
-        // setBars(response.data);
-        // Object.keys(data.map())
-        // console.log(bars);
-      });
-  };
+  // const postRating = () => {
+  //   axiosBackendInstance
+  //     .post('/rating', {
+  //       headers: {
+  //         'Access-Control-Allow-Origin': '*',
+  //       },
+  //     })
+  //     .then(response => {
+  //       console.log('response.data', response.data);
+  //       // setBars(response.data);
+  //       // Object.keys(data.map())
+  //       // console.log(bars);
+  //     });
+  // };
 
   return (
     <Center>
@@ -80,7 +80,12 @@ export const BarInfo = ({ route, navigation }) => {
                   // eslint-disable-next-line no-unused-vars
                   .map((_, i) => (
                     // eslint-disable-next-line react/no-array-index-key
-                    <MaterialIcons name="star-outline" size={56} key={i} />
+                    // <MaterialIcons name="star-outline" size={56} key={i} 
+                    <Star
+                      key={i}
+                      filled={i < rating}
+                      onClick={() => setRating(index + 1)}
+                    />
                   ))}
               </HStack>
               <HStack space={4}>
