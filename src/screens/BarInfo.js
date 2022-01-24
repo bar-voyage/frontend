@@ -13,6 +13,19 @@ import {
 } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 import { BarInfoComponent } from '../components/barInfo/BarInfoComponent';
+import { FaStar } from "react-icons/fa";
+import { axiosBackendInstance } from '../axios';
+
+
+function Star({ filled, onClick }) {
+  return (
+    <FaStar
+      color={filled ? "orange" : "lightgray"}
+      size={30}
+      onClick={onClick} />
+  );
+}
+export default Star;
 
 export const BarInfo = ({ route, navigation }) => {
   const {
@@ -31,6 +44,26 @@ export const BarInfo = ({ route, navigation }) => {
   } = route.params;
   const [showModal, setShowModal] = useState(false);
   const toast = useToast();
+  const [rating, setRating] = useState(0);
+
+  // React.useEffect(() => {
+  //   postRating();
+  // }, []);
+
+  // const postRating = () => {
+  //   axiosBackendInstance
+  //     .post('/rating', {
+  //       headers: {
+  //         'Access-Control-Allow-Origin': '*',
+  //       },
+  //     })
+  //     .then(response => {
+  //       console.log('response.data', response.data);
+  //       // setBars(response.data);
+  //       // Object.keys(data.map())
+  //       // console.log(bars);
+  //     });
+  // };
 
   return (
     <Center>
@@ -48,7 +81,8 @@ export const BarInfo = ({ route, navigation }) => {
                   // eslint-disable-next-line no-unused-vars
                   .map((_, i) => (
                     // eslint-disable-next-line react/no-array-index-key
-                    <MaterialIcons name="star-outline" size={56} key={i} />
+                    <Star key={i} filled={i < rating}
+                      onClick={() => setRating(i + 1)} />
                   ))}
               </HStack>
               <HStack space={4}>
