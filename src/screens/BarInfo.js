@@ -46,10 +46,6 @@ export const BarInfo = ({ route, navigation }) => {
   const toast = useToast();
   const [rating, setRating] = useState(0);
 
-  React.useEffect(() => {
-    sendRating();
-  }, []);
-
   const sendRating = () => {
     axiosBackendInstance
       .post('/rating', {
@@ -58,9 +54,20 @@ export const BarInfo = ({ route, navigation }) => {
       })
       .then(response => {
         console.log('response.data', response);
-        console.log('response.data.bar_id', response.data.bar_id);
-        console.log('response.data.rating', response.data.num_stars);
+      })
+      .catch(function (error) {
+        console.log(error.toJSON());
+        toast.show({
+          title: 'Oops! Something went wrong',
+          status: 'error',
+          description: `Our team is working on it - please try again later!`,
+        });
       });
+    toast.show({
+      title: 'Submitted',
+      status: 'success',
+      description: `Thanks! We appreciate you 💛 Your rating was ${rating}`,
+    });
   };
 
   return (
@@ -146,11 +153,7 @@ export const BarInfo = ({ route, navigation }) => {
             <Button
               onPress={() => {
                 navigation.navigate('Map');
-                toast.show({
-                  title: 'Submitted',
-                  status: 'success',
-                  description: `Thanks! We appreciate you 💛 Your rating was ${rating}`,
-                });
+                sendRating();
               }}
             >
               <Text style={styles.submitButtonText}>Submit</Text>
