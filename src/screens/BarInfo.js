@@ -52,9 +52,6 @@ export const BarInfo = ({ route, navigation }) => {
         bar_id: 1,
         num_stars: rating,
       })
-      .then(response => {
-        console.log('response.data', response);
-      })
       .catch(function (error) {
         console.log(error.toJSON());
         toast.show({
@@ -62,12 +59,15 @@ export const BarInfo = ({ route, navigation }) => {
           status: 'error',
           description: `Our team is working on it - please try again later!`,
         });
+      })
+      .then(response => {
+        console.log('response.data', response);
+        toast.show({
+          title: 'Submitted',
+          status: 'success',
+          description: `Thanks! We appreciate you 💛 Your rating was ${rating}`,
+        });
       });
-    toast.show({
-      title: 'Submitted',
-      status: 'success',
-      description: `Thanks! We appreciate you 💛 Your rating was ${rating}`,
-    });
   };
 
   return (
