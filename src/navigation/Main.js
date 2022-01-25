@@ -5,6 +5,7 @@ import { Image, View, StyleSheet } from 'react-native';
 import { HeaderMenu } from '../components/HeaderMenu';
 
 import { Login } from '../screens/Login';
+import { SignUp } from '../screens/SignUp';
 import { Survey } from '../screens/Survey';
 import { BarInfo } from '../screens/BarInfo';
 import { Map } from '../screens/Map';
@@ -36,6 +37,7 @@ const styles = StyleSheet.create({
 export const Main = () => (
   <MainStack.Navigator>
     <MainStack.Screen name="Login" component={Login} {...headerOptions} />
+    <MainStack.Screen name="SignUp" component={SignUp} {...headerOptions} />
     <MainStack.Screen name="Survey" component={Survey} {...headerOptions} />
     <MainStack.Screen name="Map" component={Map} {...headerOptions} />
     <MainStack.Screen name="BarInfo" component={BarInfo} {...headerOptions} />

@@ -71,7 +71,6 @@ export const Map = ({ navigation }) => {
             keyExtractor={item => item.bar_id}
           />
         )}
-        { /*)}*/}
       </Box>
     </>
   );

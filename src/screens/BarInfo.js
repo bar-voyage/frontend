@@ -12,19 +12,17 @@ import {
   useToast,
 } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
+import { FaStar } from 'react-icons/fa';
 import { BarInfoComponent } from '../components/barInfo/BarInfoComponent';
-import { FaStar } from "react-icons/fa";
 import { axiosBackendInstance } from '../axios';
-
-
-
 
 function Star({ filled, onClick }) {
   return (
     <FaStar
-      color={filled ? "orange" : "lightgray"}
+      color={filled ? 'orange' : 'lightgray'}
       size={30}
-      onClick={onClick} />
+      onClick={onClick}
+    />
   );
 }
 export default Star;
@@ -48,7 +46,6 @@ export const BarInfo = ({ route, navigation }) => {
   const toast = useToast();
   const [rating, setRating] = useState(0);
 
-
   React.useEffect(() => {
     sendRating();
   }, []);
@@ -57,16 +54,14 @@ export const BarInfo = ({ route, navigation }) => {
     axiosBackendInstance
       .post('/rating', {
         bar_id: 1,
-        num_stars: 3
+        num_stars: rating,
       })
       .then(response => {
         console.log('response.data', response);
-        console.log('response.data.bar_id', response.data.bar_id)
-        console.log('response.data.rating', response.data.num_stars)
+        console.log('response.data.bar_id', response.data.bar_id);
+        console.log('response.data.rating', response.data.num_stars);
       });
   };
-
-
 
   return (
     <Center>
@@ -83,9 +78,9 @@ export const BarInfo = ({ route, navigation }) => {
                   .fill()
                   // eslint-disable-next-line no-unused-vars
                   .map((_, i) => (
-                    // eslint-disable-next-line react/no-array-index-key
-                    // <MaterialIcons name="star-outline" size={56} key={i} 
+                    // <MaterialIcons name="star-outline" size={56} key={i}
                     <Star
+                      // eslint-disable-next-line react/no-array-index-key
                       key={i}
                       filled={i < rating}
                       onClick={() => setRating(i + 1)}
@@ -154,7 +149,7 @@ export const BarInfo = ({ route, navigation }) => {
                 toast.show({
                   title: 'Submitted',
                   status: 'success',
-                  description: 'Thanks! We appreciate you 💛 Your rating was ' + rating,
+                  description: `Thanks! We appreciate you 💛 Your rating was ${rating}`,
                 });
               }}
             >
