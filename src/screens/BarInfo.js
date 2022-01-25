@@ -17,6 +17,8 @@ import { FaStar } from "react-icons/fa";
 import { axiosBackendInstance } from '../axios';
 
 
+
+
 function Star({ filled, onClick }) {
   return (
     <FaStar
@@ -44,25 +46,27 @@ export const BarInfo = ({ route, navigation }) => {
   } = route.params;
   const [showModal, setShowModal] = useState(false);
   const toast = useToast();
+  const [rating, setRating] = useState(0);
 
-  // React.useEffect(() => {
-  //   postRating();
-  // }, []);
 
-  // const postRating = () => {
-  //   axiosBackendInstance
-  //     .post('/rating', {
-  //       headers: {
-  //         'Access-Control-Allow-Origin': '*',
-  //       },
-  //     })
-  //     .then(response => {
-  //       console.log('response.data', response.data);
-  //       // setBars(response.data);
-  //       // Object.keys(data.map())
-  //       // console.log(bars);
-  //     });
-  // };
+  React.useEffect(() => {
+    sendRating();
+  }, []);
+
+  const sendRating = () => {
+    axiosBackendInstance
+      .post('/rating', {
+        bar_id: 1,
+        num_stars: 3
+      })
+      .then(response => {
+        console.log('response.data', response);
+        console.log('response.data.bar_id', response.data.bar_id)
+        console.log('response.data.rating', response.data.num_stars)
+      });
+  };
+
+
 
   return (
     <Center>
@@ -84,7 +88,7 @@ export const BarInfo = ({ route, navigation }) => {
                     <Star
                       key={i}
                       filled={i < rating}
-                      onClick={() => setRating(index + 1)}
+                      onClick={() => setRating(i + 1)}
                     />
                   ))}
               </HStack>
@@ -150,7 +154,7 @@ export const BarInfo = ({ route, navigation }) => {
                 toast.show({
                   title: 'Submitted',
                   status: 'success',
-                  description: 'Thanks! We appreciate you 💛',
+                  description: 'Thanks! We appreciate you 💛 Your rating was ' + rating,
                 });
               }}
             >
