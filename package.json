@@ -30,8 +30,10 @@
     "expo-status-bar": "~1.1.0",
     "firebase": "^8.10.0",
     "native-base": "^3.2.2-rc.3",
+    "prettier": "^2.5.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
+    "react-icons": "^4.3.1",
     "react-native": "0.64.2",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-safe-area-context": "3.3.2",
@@ -39,7 +41,8 @@
     "react-native-svg": "12.1.1",
     "react-native-web": "0.17.1",
     "styled-components": "^5.3.3",
-    "styled-system": "^5.1.5"
+    "styled-system": "^5.1.5",
+    "expo-image-picker": "~11.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

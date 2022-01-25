@@ -1,40 +1,44 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   KeyboardAvoidingView,
   StyleSheet,
   TextInput,
   View,
 } from 'react-native';
-import { Button, Center, Heading, HStack, Text } from 'native-base';
+import { Button, Center, Heading, HStack, Text, useToast } from 'native-base';
 import { auth } from '../../firebase';
+import { axiosBackendInstance } from '../axios';
 
-export const Login = () => {
+export const SignUp = () => {
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
 
-  const navigation = useNavigation();
+  const toast = useToast();
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
-      if (user) {
-        navigation.replace('Survey');
-      }
-    });
-
-    return unsubscribe;
-  }, []);
-
-  const handleSignUpNavigate = () => {
-    navigation.navigate('SignUp');
+  const registerUser = (userEmail, userPassword) => {
+    axiosBackendInstance
+      .post('/register', {
+        email: userEmail,
+        password: userPassword,
+      })
+      .then(response => {
+        console.log('registerUser response', response);
+      });
   };
 
-  const handleLogin = () => {
+  const handleSignUp = () => {
     auth
-      .signInWithEmailAndPassword(email, password)
+      .createUserWithEmailAndPassword(email, password)
       .then(userCredentials => {
         const user = userCredentials.user;
-        console.log('Logged in with:', user.email);
+        registerUser(user.email, password);
+        console.log('Registered with:', user.email);
+        toast.show({
+          title: 'Account created',
+          status: 'success',
+          description: `Now let's get this show on the road! 🥳`,
+        });
       })
       .catch(error => alert(error.message));
   };
@@ -42,17 +46,23 @@ export const Login = () => {
   return (
     <Center>
       <Heading size="4xl" pt={38}>
-        🍻
+        &nbsp;
       </Heading>
-      <Heading size="3xl" pb={3}>
-        Bar Voyage
+      <Heading size="2xl" pb={3}>
+        Create Account
       </Heading>
       <HStack pb={8}>
-        <Text italic>Nights out have never been better</Text>
-        <Text>😎</Text>
+        <Text italic>Welcome! Bar hopping journeys await you</Text>
+        <Text>🚢</Text>
       </HStack>
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Name"
+            value={name}
+            onChangeText={text => setName(text)}
+            style={styles.input}
+          />
           <TextInput
             placeholder="Email"
             value={email}
@@ -69,14 +79,8 @@ export const Login = () => {
         </View>
 
         <View style={styles.buttonContainer}>
-          <Button onPress={handleLogin} style={styles.button}>
-            <Text style={styles.buttonText}>Login →</Text>
-          </Button>
-          <Button
-            onPress={handleSignUpNavigate}
-            style={[styles.button, styles.buttonOutline]}
-          >
-            <Text style={styles.buttonOutlineText}>Sign up</Text>
+          <Button onPress={handleSignUp} style={styles.button}>
+            <Text style={styles.buttonText}>Sign up</Text>
           </Button>
         </View>
       </KeyboardAvoidingView>
@@ -112,20 +116,8 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
   },
-  buttonOutline: {
-    backgroundColor: 'white',
-    marginTop: 10,
-    borderColor: '#2596be',
-    borderWidth: 2,
-  },
   buttonText: {
     color: 'white',
-    fontWeight: 'bold',
-    fontSize: 20,
-    paddingVertical: 15,
-  },
-  buttonOutlineText: {
-    color: '#2596be',
     fontWeight: 'bold',
     fontSize: 20,
     paddingVertical: 15,

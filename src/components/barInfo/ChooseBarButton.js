@@ -4,7 +4,7 @@ import { Button, Text } from 'native-base';
 
 export const ChooseBarButton = props => (
   <Button onPress={props.onPressChooseBar}>
-    <Text style={styles.text}>Let&apos;s go here!</Text>
+    <Text style={styles.text}>Check-in here!</Text>
   </Button>
 );
 

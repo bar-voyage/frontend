@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { Image, Pressable, StyleSheet } from 'react-native';
 import {
   Badge,
   Box,
@@ -9,9 +9,38 @@ import {
   HStack,
   IconButton,
   Text,
+  useToast,
 } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
+import { FaStar } from 'react-icons/fa';
+import * as ImagePicker from 'expo-image-picker';
 import { BarInfoComponent } from '../components/barInfo/BarInfoComponent';
+import { axiosBackendInstance } from '../axios';
+
+const Star = ({ filled, onClick }) => {
+  return (
+    <FaStar
+      color={filled ? 'orange' : 'lightgray'}
+      size={36}
+      onClick={onClick}
+    />
+  );
+};
+
+const DescriptorBadge = ({ text }) => {
+  const [selected, setSelected] = useState(false);
+  return (
+    <Pressable
+      onPress={() => {
+        setSelected(!selected);
+      }}
+    >
+      <Badge variant={selected ? 'solid' : 'outline'}>
+        <Text color={selected ? 'white' : 'black'}>{text}</Text>
+      </Badge>
+    </Pressable>
+  );
+};
 
 export const BarInfo = ({ route, navigation }) => {
   const {
@@ -19,7 +48,11 @@ export const BarInfo = ({ route, navigation }) => {
     avg_stars,
     bar_id,
     city,
+    // TODO: add deals + description + imageLinks in db for Bar ?
+    deals,
+    description,
     hours,
+    imageLinks,
     is_open,
     latitude,
     longitude,
@@ -29,6 +62,48 @@ export const BarInfo = ({ route, navigation }) => {
     zip,
   } = route.params;
   const [showModal, setShowModal] = useState(false);
+  const toast = useToast();
+  const [rating, setRating] = useState(0);
+  const [image, setImage] = useState(null);
+
+  const sendRating = () => {
+    axiosBackendInstance
+      .post('/rating', {
+        bar_id: 1,
+        num_stars: rating,
+      })
+      .catch(function (error) {
+        console.log(error.toJSON());
+        toast.show({
+          title: 'Oops! Something went wrong',
+          status: 'error',
+          description: `Our team is working on it - please try again later!`,
+        });
+      })
+      .then(response => {
+        console.log('response.data', response);
+        toast.show({
+          title: 'Submitted',
+          status: 'success',
+          description: `Thanks! We appreciate you 💛 \nYour rating was ${rating}`,
+        });
+      });
+  };
+
+  const selectImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  };
 
   return (
     <Center>
@@ -36,51 +111,38 @@ export const BarInfo = ({ route, navigation }) => {
         <Modal.Content>
           <Modal.CloseButton />
           <Modal.Header>
-            <Text style={styles.modalHeader}>So... how was {name}?</Text>
+            <Text style={styles.modalHeader}>What do you think of {name}?</Text>
           </Modal.Header>
           <Modal.Body>
             <Center>
-              <HStack pb={5}>
+              <HStack pb={5} space="sm">
                 {Array(5)
                   .fill()
                   // eslint-disable-next-line no-unused-vars
                   .map((_, i) => (
-                    // eslint-disable-next-line react/no-array-index-key
-                    <MaterialIcons name="star-outline" size={56} key={i} />
+                    // <MaterialIcons name="star-outline" size={56} key={i}
+                    <Star
+                      // eslint-disable-next-line react/no-array-index-key
+                      key={i}
+                      filled={i < rating}
+                      onClick={() => setRating(i + 1)}
+                    />
                   ))}
               </HStack>
               <HStack space={4}>
-                <Badge variant="outline">
-                  <Text>crowded</Text>
-                </Badge>
-                <Badge variant="outline">
-                  <Text>good music</Text>
-                </Badge>
-                <Badge variant="outline">
-                  <Text>fun</Text>
-                </Badge>
+                <DescriptorBadge text="crowded" />
+                <DescriptorBadge text="good music" />
+                <DescriptorBadge text="fun" />
               </HStack>
               <HStack space={4} pt={4}>
-                <Badge variant="outline">
-                  <Text>cheap drinks</Text>
-                </Badge>
-                <Badge variant="outline">
-                  <Text>has cover</Text>
-                </Badge>
-                <Badge variant="outline">
-                  <Text>dirty</Text>
-                </Badge>
+                <DescriptorBadge text="cheap drinks" />
+                <DescriptorBadge text="has cover" />
+                <DescriptorBadge text="dirty" />
               </HStack>
               <HStack space={4} pt={4}>
-                <Badge variant="outline">
-                  <Text>boring</Text>
-                </Badge>
-                <Badge variant="outline">
-                  <Text>expensive</Text>
-                </Badge>
-                <Badge variant="outline">
-                  <Text>young crowd</Text>
-                </Badge>
+                <DescriptorBadge text="boring" />
+                <DescriptorBadge text="expensive" />
+                <DescriptorBadge text="young crowd" />
               </HStack>
               <Box pt={8} pb={8} alignItems="center">
                 <Box p="4" rounded="10" borderWidth={3} borderColor="#2596be">
@@ -90,15 +152,22 @@ export const BarInfo = ({ route, navigation }) => {
                   <Text style={styles.text}>
                     Upload your photos/videos below!
                   </Text>
-                  <Box>
+                  <Box alignItems="center">
                     <IconButton
                       _icon={{
                         as: MaterialIcons,
                         name: 'file-upload',
                         size: 100,
                       }}
+                      onPress={selectImage}
                       style={styles.uploadButton}
                     />
+                    {image && (
+                      <Image
+                        source={{ uri: image }}
+                        style={{ width: 200, height: 200 }}
+                      />
+                    )}
                   </Box>
                 </Box>
               </Box>
@@ -108,6 +177,7 @@ export const BarInfo = ({ route, navigation }) => {
             <Button
               onPress={() => {
                 navigation.navigate('Map');
+                sendRating();
               }}
             >
               <Text style={styles.submitButtonText}>Submit</Text>
