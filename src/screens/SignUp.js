@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { Button, Center, Heading, HStack, Text, useToast } from 'native-base';
 import { auth } from '../../firebase';
+import { axiosBackendInstance } from '../axios';
 
 export const SignUp = () => {
   const [email, setEmail] = useState('');
@@ -15,11 +16,23 @@ export const SignUp = () => {
 
   const toast = useToast();
 
+  const registerUser = (userEmail, userPassword) => {
+    axiosBackendInstance
+      .post('/register', {
+        email: userEmail,
+        password: userPassword,
+      })
+      .then(response => {
+        console.log('registerUser response', response);
+      });
+  };
+
   const handleSignUp = () => {
     auth
       .createUserWithEmailAndPassword(email, password)
       .then(userCredentials => {
         const user = userCredentials.user;
+        registerUser(user.email, password);
         console.log('Registered with:', user.email);
         toast.show({
           title: 'Account created',
@@ -103,20 +116,8 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
   },
-  buttonOutline: {
-    backgroundColor: 'white',
-    marginTop: 10,
-    borderColor: '#2596be',
-    borderWidth: 2,
-  },
   buttonText: {
     color: 'white',
-    fontWeight: 'bold',
-    fontSize: 20,
-    paddingVertical: 15,
-  },
-  buttonOutlineText: {
-    color: '#2596be',
     fontWeight: 'bold',
     fontSize: 20,
     paddingVertical: 15,
