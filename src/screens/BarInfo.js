@@ -33,7 +33,11 @@ export const BarInfo = ({ route, navigation }) => {
     avg_stars,
     bar_id,
     city,
+    // TODO: add deals + description + imageLinks in db for Bar ?
+    deals,
+    description,
     hours,
+    imageLinks,
     is_open,
     latitude,
     longitude,

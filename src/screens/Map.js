@@ -21,7 +21,6 @@ export const Map = ({ navigation }) => {
       .then(response => {
         console.log('response.data', response.data);
         setBars(response.data);
-        // Object.keys(data.map())
         console.log(bars);
       });
   };
@@ -56,7 +55,6 @@ export const Map = ({ navigation }) => {
         {bars && (
           <FlatList
             data={bars}
-            // data={data}
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() => navigation.navigate('BarInfo', item)}
