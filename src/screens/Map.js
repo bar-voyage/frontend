@@ -1,28 +1,32 @@
 import React, { useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { Box, FlatList, Heading, Image } from 'native-base';
+import AsyncStorage from '@react-native-community/async-storage';
 import { RecommendationCard } from '../components/RecommendationCard';
 import { axiosBackendInstance } from '../axios';
 
 export const Map = ({ navigation }) => {
   const [bars, setBars] = useState();
+  // const [userId, setUserId] = useState(0);
 
   React.useEffect(() => {
     getBars();
   }, []);
 
   const getBars = () => {
-    axiosBackendInstance
-      .get('/bars', {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-        },
-      })
-      .then(response => {
-        console.log('response.data', response.data);
-        setBars(response.data);
-        console.log(bars);
-      });
+    AsyncStorage.getItem('user_id').then(value => {
+      console.log('value', value);
+      // setUserId(value);
+      axiosBackendInstance
+        .post('/rec_bars', {
+          user_id: value,
+        })
+        .then(response => {
+          console.log('response.data', response.data);
+          setBars(response.data);
+          console.log(bars);
+        });
+    });
   };
 
   return (
