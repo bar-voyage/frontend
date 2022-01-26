@@ -9,9 +9,27 @@ import {
   Text,
   VStack,
 } from 'native-base';
+import AsyncStorage from '@react-native-community/async-storage';
+import { axiosBackendInstance } from '../axios';
 
 export const Survey = ({ navigation }) => {
   const [groupValues, setGroupValues] = React.useState([]);
+
+  const handleSubmitUserPrefs = () => {
+    AsyncStorage.getItem('user_id').then(value => {
+      console.log('groupValues', groupValues);
+      axiosBackendInstance
+        .post('/user-pref', {
+          pref: groupValues,
+          user_id: value,
+        })
+        .then(response => {
+          console.log('user pref response', response);
+        });
+    });
+    navigation.navigate('Map');
+  };
+
   return (
     <Center height="100%">
       <Heading size="xl">Hey Melody!</Heading>
@@ -22,28 +40,28 @@ export const Survey = ({ navigation }) => {
         accessibilityLabel="choose numbers"
       >
         <VStack py={6}>
-          <Checkbox value="1" my={2}>
+          <Checkbox value="karaoke" my={2}>
             <Text style={styles.checkboxText}>Karaoke 🎤</Text>
           </Checkbox>
-          <Checkbox value="2" my={2}>
+          <Checkbox value="dive bar" my={2}>
             <Text style={styles.checkboxText}>Dive Bar 🍺</Text>
           </Checkbox>
-          <Checkbox value="3" my={2}>
+          <Checkbox value="club" my={2}>
             <Text style={styles.checkboxText}>Club 🍾</Text>
           </Checkbox>
-          <Checkbox value="4" my={2}>
+          <Checkbox value="sports" my={2}>
             <Text style={styles.checkboxText}>Sports 🏈</Text>
           </Checkbox>
-          <Checkbox value="5" my={2}>
+          <Checkbox value="dancing" my={2}>
             <Text style={styles.checkboxText}>Dancing 🕺</Text>
           </Checkbox>
-          <Checkbox value="6" my={2}>
+          <Checkbox value="lgbtq+" my={2}>
             <Text style={styles.checkboxText}>LGBTQ+ 🌈</Text>
           </Checkbox>
         </VStack>
       </Checkbox.Group>
       <Box width="80%">
-        <Button onPress={() => navigation.navigate('Map')}>
+        <Button onPress={handleSubmitUserPrefs}>
           <Text style={styles.buttonText}>Next →</Text>
         </Button>
       </Box>

@@ -7,7 +7,9 @@ import {
   View,
 } from 'react-native';
 import { Button, Center, Heading, HStack, Text } from 'native-base';
+import AsyncStorage from '@react-native-community/async-storage';
 import { auth } from '../../firebase';
+import { axiosBackendInstance } from '../axios';
 
 export const Login = () => {
   const [email, setEmail] = useState('');
@@ -30,6 +32,19 @@ export const Login = () => {
   };
 
   const handleLogin = () => {
+    console.log(email, password);
+    axiosBackendInstance
+      .post('/login', {
+        email: email,
+        password: password,
+      })
+      .then(response => {
+        console.log('response for login get', response);
+        console.log('response.data.user_id', response.data.user_id);
+        AsyncStorage.setItem('user_id', response.data.user_id);
+        // setBars(response.data);
+        // console.log(bars);
+      });
     auth
       .signInWithEmailAndPassword(email, password)
       .then(userCredentials => {
