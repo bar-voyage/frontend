@@ -6,6 +6,7 @@ import {
   View,
 } from 'react-native';
 import { Button, Center, Heading, HStack, Text, useToast } from 'native-base';
+import AsyncStorage from '@react-native-community/async-storage';
 import { auth } from '../../firebase';
 import { axiosBackendInstance } from '../axios';
 
@@ -24,6 +25,17 @@ export const SignUp = () => {
       })
       .then(response => {
         console.log('registerUser response', response);
+        axiosBackendInstance
+          .post('/login', {
+            email: userEmail,
+            password: userPassword,
+          })
+          .then(res => {
+            AsyncStorage.setItem('user_id', res.data.user_id);
+            AsyncStorage.getItem('user_id').then(value => {
+              console.log('user_id value IN SIGNUP', value);
+            });
+          });
       });
   };
 

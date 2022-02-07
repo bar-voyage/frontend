@@ -22,9 +22,9 @@ export const Map = ({ navigation }) => {
           user_id: value,
         })
         .then(response => {
-          console.log('response.data', response.data);
+          console.log('getRecBars response.data', response.data);
           setBars(response.data);
-          console.log(bars);
+          console.log('BARS', bars);
         });
     });
   };
