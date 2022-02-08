@@ -18,6 +18,7 @@ export const Survey = ({ navigation }) => {
   const handleSubmitUserPrefs = () => {
     AsyncStorage.getItem('user_id').then(value => {
       console.log('groupValues', groupValues);
+      console.log('user_id', value);
       axiosBackendInstance
         .post('/user-pref', {
           pref: groupValues,
@@ -25,9 +26,9 @@ export const Survey = ({ navigation }) => {
         })
         .then(response => {
           console.log('user pref response', response);
+          navigation.navigate('Map');
         });
     });
-    navigation.navigate('Map');
   };
 
   return (
