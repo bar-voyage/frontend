@@ -67,6 +67,32 @@ export const BarInfo = ({ route, navigation }) => {
   const [image, setImage] = useState(null);
 
   const sendRating = () => {
+    const formData = new FormData();
+    console.log('image', image);
+    formData.append('photo', image, 'photo.png');
+    formData.append('bar_id', 1);
+    formData.append('user_id', 55);
+    axiosBackendInstance
+      .post('/upload_photo', {
+        data: formData,
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      .catch(function (error) {
+        console.log(error.toJSON());
+        toast.show({
+          title: 'Oops! Something went wrong',
+          status: 'error',
+          description: `Our team is working on it - please try again later!`,
+        });
+      })
+      .then(response => {
+        console.log('response.data', response);
+        // toast.show({
+        //   title: 'Submitted',
+        //   status: 'success',
+        //   description: `Thanks! We appreciate you 💛 \nYour rating was ${rating}`,
+        // });
+      });
     axiosBackendInstance
       .post('/rating', {
         bar_id: 1,
@@ -101,7 +127,10 @@ export const BarInfo = ({ route, navigation }) => {
     console.log(result);
 
     if (!result.cancelled) {
-      setImage(result.uri);
+      const response = await fetch(result.uri);
+      const blob = await response.blob();
+      console.log('blooob', blob);
+      setImage(blob);
     }
   };
 
