@@ -73,31 +73,51 @@ export const BarInfo = ({ route, navigation }) => {
   const sendRating = () => {
     let success = 0
     AsyncStorage.getItem('user_id').then(user_id => {
-      axiosBackendInstance
-        .post('/upload_photo', {
-            'bar_id': bar_id,
-            'user_id': user_id,
-            'photo': image,
-            'phototype': imagetype,
-            'filename': filename
-        })
-        .catch(function (error) {
-          console.log(error.toJSON());
-          toast.show({
-            title: 'Oops! Something went wrong',
-            status: 'error',
-            description: `Our team is working on it - please try again later!`,
+      /* only upload if there's a picture there */
+      if(image != null) {
+        axiosBackendInstance
+          .post('/upload_photo', {
+              'bar_id': bar_id,
+              'user_id': user_id,
+              'photo': image,
+              'phototype': imagetype,
+              'filename': filename
+          })
+          .catch(function (error) {
+            console.log(error.toJSON());
+            toast.show({
+              title: 'Oops! Something went wrong',
+              status: 'error',
+              description: `Our team is working on it - please try again later!`,
+            });
+          })
+          .then(response => {
+            console.log('response.data', response);
+            // toast.show({
+            //   title: 'Submitted',
+            //   status: 'success',
+            //   description: `Thanks! We appreciate you 💛 \nYour rating was ${rating}`,
+            // });
+            success += 1
           });
-        })
-        .then(response => {
-          console.log('response.data', response);
-          // toast.show({
-          //   title: 'Submitted',
-          //   status: 'success',
-          //   description: `Thanks! We appreciate you 💛 \nYour rating was ${rating}`,
-          // });
-          success += 1
-        });
+          /* TODO: update content viewable if they uploaded a picture */
+          axiosBackendInstance
+            .post('/content_view', {
+                'user_id': user_id,
+                'content_view': 1
+            })
+            .catch(function (error) {
+              console.log(error.toJSON());
+              toast.show({
+                title: 'Oops! Something went wrong',
+                status: 'error',
+                description: `Our team is working on it - please try again later!`,
+              });
+            })
+            .then(response => {
+              console.log('response.data', response);
+            });
+        }
     })
     axiosBackendInstance
       .post('/rating', {
@@ -122,6 +142,8 @@ export const BarInfo = ({ route, navigation }) => {
           });
         }
       });
+
+    /* TODO: update the current bar status */
   };
 
   const selectImage = async () => {

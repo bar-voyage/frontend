@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Image,
@@ -11,12 +11,32 @@ import {
 } from 'native-base';
 import { DetailsRow } from './DetailsRow';
 import { ChooseBarButton } from './ChooseBarButton';
+import { axiosBackendInstance } from '../../axios';
 
 export const BarInfoComponent = props => {
   const { bar, blurContent, onPressChooseBar } = props;
   const blurRadius = blurContent ? 5 : 0;
 
   const address = `${bar.address}, ${bar.city}, ${bar.state} ${bar.zip}`;
+  let photos = [];
+  //const [photos, setPhotos] = useState([]);
+  const noPhoto = 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fstock.adobe.com%2Fsearch%2Fimages%3Fk%3Dno%2520image%2520available&psig=AOvVaw0kCCzL6sW8SwBI87tBvBwh&ust=1645476984823000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCMDm3JuWj_YCFQAAAAAdAAAAABAD';
+
+  React.useEffect(() => {
+      console.log("bar.bar_id ", bar.bar_id)
+      axiosBackendInstance
+        .post('/get_photos', {
+          bar_id: bar.bar_id,
+        })
+        .then(response => {
+          console.log('getphotos response.data', response.data);
+          photos = response.data
+          console.log('PHOTOS', photos);
+        })
+        .catch(function (error) {
+          console.log("No photos")
+        });
+  }, []);
 
   return (
     <Container>
@@ -45,8 +65,8 @@ export const BarInfoComponent = props => {
             <HStack space={3}>
               <Image
                 source={{
-                  uri: 'https://gwtoday.gwu.edu/sites/g/files/zaxdzs1531/f/styles/gw_editorial_article_full/public/image/SEH17_SEH_UP_2015-WLA_6446_1080x.jpg?itok=9egdRwXz',
-                  // uri: bar.imageLinks[0],
+                  //uri: 'https://gwtoday.gwu.edu/sites/g/files/zaxdzs1531/f/styles/gw_editorial_article_full/public/image/SEH17_SEH_UP_2015-WLA_6446_1080x.jpg?itok=9egdRwXz',
+                  uri: photos[0] != undefined ? photos[0] : 'https://gwtoday.gwu.edu/sites/g/files/zaxdzs1531/f/styles/gw_editorial_article_full/public/image/SEH17_SEH_UP_2015-WLA_6446_1080x.jpg?itok=9egdRwXz',
                 }}
                 alt="Photo of xyz"
                 size="xl"
