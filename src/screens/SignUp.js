@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native';
 import { Button, Center, Heading, HStack, Text, useToast } from 'native-base';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { auth } from '../../firebase';
 import { axiosBackendInstance } from '../axios';
 

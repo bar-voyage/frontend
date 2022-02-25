@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { Box, FlatList, Heading, Image } from 'native-base';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RecommendationCard } from '../components/RecommendationCard';
 import { axiosBackendInstance } from '../axios';
+import GetLocation from 'react-native-get-location'
+
 
 export const Map = ({ navigation }) => {
   const [bars, setBars] = useState([]);
