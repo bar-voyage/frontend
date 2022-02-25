@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { TouchableOpacity } from 'react-native';
-import { Box, FlatList, Heading, Image } from 'native-base';
+import { Box, FlatList, Heading } from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import GetLocation from 'react-native-get-location';
+import MapView from 'react-native-web-maps';
 import { RecommendationCard } from '../components/RecommendationCard';
 import { axiosBackendInstance } from '../axios';
-import GetLocation from 'react-native-get-location'
-
 
 export const Map = ({ navigation }) => {
   const [bars, setBars] = useState([]);
@@ -51,12 +51,13 @@ export const Map = ({ navigation }) => {
           md: '25%',
         }}
       >
-        <Image
-          style={{ width: '100%', height: '100%' }}
-          source={{
-            uri: 'https://www.thehotelguru.com/static-maps/collections/9723.png',
+        <MapView
+          initialRegion={{
+            latitude: 37.78825,
+            longitude: -122.4324,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
           }}
-          alt="dummy map image"
         />
       </Box>
       <Box
@@ -69,7 +70,6 @@ export const Map = ({ navigation }) => {
         <Heading fontSize="xl" p="4" pb="3">
           Your Recommendations
         </Heading>
-        {/* {bars && ( */}
         <FlatList
           data={bars}
           renderItem={({ item }) => (
@@ -85,7 +85,6 @@ export const Map = ({ navigation }) => {
           )}
           keyExtractor={item => item.bar_id}
         />
-        {/* )} */}
       </Box>
     </>
   );
