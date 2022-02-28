@@ -44,7 +44,7 @@ export const Map = ({ navigation }) => {
 
   return (
     <>
-      <Box
+      {/* <Box
         h="50%"
         w={{
           base: '100%',
@@ -58,9 +58,9 @@ export const Map = ({ navigation }) => {
           }}
           alt="dummy map image"
         />
-      </Box>
+      </Box> */}
       <Box
-        h="50%"
+        h="100%"
         w={{
           base: '100%',
           md: '25%',

@@ -16,6 +16,7 @@ import { axiosBackendInstance } from '../axios';
 export const Survey = ({ navigation }) => {
   const [groupValues, setGroupValues] = React.useState([]);
   const [userLocation, setLocation] = React.useState(null)
+  const [errorMsg, setErrorMsg] = React.useState()
 
   const handleSubmitUserPrefs = () => {
     AsyncStorage.getItem('user_id').then(value => {

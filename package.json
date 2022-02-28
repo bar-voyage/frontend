@@ -1,6 +1,7 @@
 {
   "name": "barvoyage",
   "version": "1.0.0",
+  "homepage": "http://bar-voyage.github.io/frontend/",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
@@ -9,7 +10,9 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "lint": "eslint .",
-    "format": "prettier --write '**/*.js'"
+    "format": "prettier --write '**/*.js'",
+    "deploy": "gh-pages -d web-build",
+    "predeploy": "expo build:web"
   },
   "dependencies": {
     "@expo/vector-icons": "^12.0.0",
@@ -30,8 +33,10 @@
     "expo-font": "~10.0.3",
     "expo-image-picker": "~11.0.3",
     "expo-linear-gradient": "~10.0.3",
+    "expo-location": "~13.0.4",
     "expo-status-bar": "~1.1.0",
     "firebase": "^8.10.0",
+    "gh-pages": "^3.2.3",
     "native-base": "^3.2.2-rc.3",
     "prettier": "^2.5.1",
     "react": "17.0.1",
@@ -46,8 +51,7 @@
     "react-native-svg": "12.1.1",
     "react-native-web": "0.17.1",
     "styled-components": "^5.3.3",
-    "styled-system": "^5.1.5",
-    "expo-location": "~13.0.4"
+    "styled-system": "^5.1.5"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
