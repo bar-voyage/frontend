@@ -12,16 +12,21 @@ import { axiosBackendInstance } from '../axios';
 
 export const SignUp = () => {
   const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
+  // const [name, setName] = useState('');
+  const [fname, setFName] = useState('');
+  const [lname, setLName] = useState('');
   const [password, setPassword] = useState('');
 
   const toast = useToast();
 
-  const registerUser = (userEmail, userPassword) => {
+  const registerUser = (userEmail, userPassword, userFName, userLName) => {
+    console.log(userFName, userLName)
     axiosBackendInstance
       .post('/register', {
         email: userEmail,
         password: userPassword,
+        fname: userFName,
+        lname: userLName
       })
       .then(response => {
         console.log('registerUser response', response);
@@ -44,8 +49,8 @@ export const SignUp = () => {
       .createUserWithEmailAndPassword(email, password)
       .then(userCredentials => {
         const user = userCredentials.user;
-        registerUser(user.email, password);
-        console.log('Registered with:', user.email);
+        registerUser(user.email, password, fname, lname);
+        console.log('Registered with:', user.email, fname, lname);
         toast.show({
           title: 'Account created',
           status: 'success',
@@ -70,9 +75,15 @@ export const SignUp = () => {
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <View style={styles.inputContainer}>
           <TextInput
-            placeholder="Name"
-            value={name}
-            onChangeText={text => setName(text)}
+            placeholder="First Name"
+            value={fname}
+            onChangeText={text => setFName(text)}
+            style={styles.input}
+          />
+           <TextInput
+            placeholder="Last Name"
+            value={lname}
+            onChangeText={text => setLName(text)}
             style={styles.input}
           />
           <TextInput
