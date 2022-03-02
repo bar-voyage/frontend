@@ -16,6 +16,13 @@ import { axiosBackendInstance } from '../axios';
 export const Survey = ({ navigation }) => {
   const [groupValues, setGroupValues] = React.useState([]);
   const [userLocation, setLocation] = React.useState(null)
+  const [errorMsg, setErrorMsg] = React.useState()
+  const [username, setUserName] = React.useState()
+
+  AsyncStorage.getItem('user_name').then(value => {
+    setUserName(value)
+    console.log(value)
+  })
 
   const handleSubmitUserPrefs = () => {
     AsyncStorage.getItem('user_id').then(value => {
@@ -48,7 +55,7 @@ export const Survey = ({ navigation }) => {
 
   return (
     <Center height="100%">
-      <Heading size="xl">Hey Melody!</Heading>
+      <Heading size="xl">Hey {username}!</Heading>
       <Heading size="lg">What are the vibes for tonight?</Heading>
       <Checkbox.Group
         onChange={setGroupValues}

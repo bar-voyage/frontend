@@ -12,16 +12,20 @@ import { axiosBackendInstance } from '../axios';
 
 export const SignUp = () => {
   const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
+  const [fname, setFName] = useState('');
+  const [lname, setLName] = useState('');
   const [password, setPassword] = useState('');
 
   const toast = useToast();
 
-  const registerUser = (userEmail, userPassword) => {
+  const registerUser = (userEmail, userPassword, userFName, userLName) => {
+    console.log(userFName, userLName)
     axiosBackendInstance
       .post('/register', {
         email: userEmail,
         password: userPassword,
+        fname: userFName,
+        lname: userLName
       })
       .then(response => {
         console.log('registerUser response', response);
@@ -32,6 +36,10 @@ export const SignUp = () => {
           })
           .then(res => {
             AsyncStorage.setItem('user_id', res.data.user_id);
+            AsyncStorage.setItem('user_name', res.data.fname)
+            AsyncStorage.getItem('user_name').then(value => {
+              console.log('user name value in sign up: ', value)
+            })
             AsyncStorage.getItem('user_id').then(value => {
               console.log('user_id value IN SIGNUP', value);
             });
@@ -40,19 +48,25 @@ export const SignUp = () => {
   };
 
   const handleSignUp = () => {
-    auth
-      .createUserWithEmailAndPassword(email, password)
-      .then(userCredentials => {
-        const user = userCredentials.user;
-        registerUser(user.email, password);
-        console.log('Registered with:', user.email);
-        toast.show({
-          title: 'Account created',
-          status: 'success',
-          description: `Now let's get this show on the road! 🥳`,
-        });
-      })
-      .catch(error => alert(error.message));
+    if (fname == '' || lname == ''){
+      alert("please enter a name")
+
+    }
+    else{
+      auth
+        .createUserWithEmailAndPassword(email, password)
+        .then(userCredentials => {
+          const user = userCredentials.user;
+          registerUser(user.email, password, fname, lname);
+          console.log('Registered with:', user.email, fname, lname);
+          toast.show({
+            title: 'Account created',
+            status: 'success',
+            description: `Now let's get this show on the road! 🥳`,
+          });
+        })
+        .catch(error => alert(error.message));
+    }
   };
 
   return (
@@ -70,9 +84,15 @@ export const SignUp = () => {
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <View style={styles.inputContainer}>
           <TextInput
-            placeholder="Name"
-            value={name}
-            onChangeText={text => setName(text)}
+            placeholder="First Name"
+            value={fname}
+            onChangeText={text => setFName(text)}
+            style={styles.input}
+          />
+           <TextInput
+            placeholder="Last Name"
+            value={lname}
+            onChangeText={text => setLName(text)}
             style={styles.input}
           />
           <TextInput
