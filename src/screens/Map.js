@@ -3,7 +3,7 @@ import { TouchableOpacity } from 'react-native';
 import { Box, FlatList, Heading } from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import GetLocation from 'react-native-get-location';
-import MapView from 'react-native-web-maps';
+// import MapView from 'react-native-web-maps';
 import { RecommendationCard } from '../components/RecommendationCard';
 import { axiosBackendInstance } from '../axios';
 

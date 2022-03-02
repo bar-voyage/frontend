@@ -1,11 +1,11 @@
 {
   "files": {
-    "app.js": "/frontend/static/js/app.d6200d57.chunk.js",
-    "app.js.map": "/frontend/static/js/app.d6200d57.chunk.js.map",
+    "app.js": "/frontend/static/js/app.4c07b51f.chunk.js",
+    "app.js.map": "/frontend/static/js/app.4c07b51f.chunk.js.map",
     "runtime~app.js": "/frontend/static/js/runtime~app.6e81b89e.js",
     "runtime~app.js.map": "/frontend/static/js/runtime~app.6e81b89e.js.map",
-    "static/js/2.0a7b2580.chunk.js": "/frontend/static/js/2.0a7b2580.chunk.js",
-    "static/js/2.0a7b2580.chunk.js.map": "/frontend/static/js/2.0a7b2580.chunk.js.map",
+    "static/js/2.4d39e782.chunk.js": "/frontend/static/js/2.4d39e782.chunk.js",
+    "static/js/2.4d39e782.chunk.js.map": "/frontend/static/js/2.4d39e782.chunk.js.map",
     "fonts/AntDesign.ttf": "/frontend/./fonts/AntDesign.ttf",
     "fonts/Entypo.ttf": "/frontend/./fonts/Entypo.ttf",
     "fonts/Feather.ttf": "/frontend/./fonts/Feather.ttf",
@@ -24,12 +24,12 @@
     "index.html": "/frontend/index.html",
     "manifest.json": "/frontend/manifest.json",
     "serve.json": "/frontend/serve.json",
-    "static/js/2.0a7b2580.chunk.js.LICENSE.txt": "/frontend/static/js/2.0a7b2580.chunk.js.LICENSE.txt",
+    "static/js/2.4d39e782.chunk.js.LICENSE.txt": "/frontend/static/js/2.4d39e782.chunk.js.LICENSE.txt",
     "static/media/header-logo.png": "/frontend/static/media/header-logo.36285ab0.png"
   },
   "entrypoints": [
     "static/js/runtime~app.6e81b89e.js",
-    "static/js/2.0a7b2580.chunk.js",
-    "static/js/app.d6200d57.chunk.js"
+    "static/js/2.4d39e782.chunk.js",
+    "static/js/app.4c07b51f.chunk.js"
   ]
 }
