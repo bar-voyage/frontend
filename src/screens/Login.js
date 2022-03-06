@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import { Button, Center, Heading, HStack, Text } from 'native-base';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { auth } from '../../firebase';
 import { axiosBackendInstance } from '../axios';
 
@@ -40,8 +40,9 @@ export const Login = () => {
       })
       .then(response => {
         console.log('response for login get', response);
-        console.log('response.data.user_id', response.data.user_id);
+        console.log('response.data.user_id', response.data);
         AsyncStorage.setItem('user_id', response.data.user_id);
+        AsyncStorage.setItem('user_name', response.data.fname);
         // setBars(response.data);
         // console.log(bars);
       });
