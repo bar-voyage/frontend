@@ -18,10 +18,10 @@ export const BarInfoComponent = props => {
   const blurRadius = blurContent ? 5 : 0;
 
   const address = `${bar.address}, ${bar.city}, ${bar.state} ${bar.zip}`;
-  let photos = [];
-  //const [photos, setPhotos] = useState([]);
-  const noPhoto = 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fstock.adobe.com%2Fsearch%2Fimages%3Fk%3Dno%2520image%2520available&psig=AOvVaw0kCCzL6sW8SwBI87tBvBwh&ust=1645476984823000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCMDm3JuWj_YCFQAAAAAdAAAAABAD';
-
+  //const photos = [];
+  const [photos, setPhotos] = useState([]);
+  //const noPhoto = 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fstock.adobe.com%2Fsearch%2Fimages%3Fk%3Dno%2520image%2520available&psig=AOvVaw0kCCzL6sW8SwBI87tBvBwh&ust=1645476984823000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCMDm3JuWj_YCFQAAAAAdAAAAABAD';
+  
   React.useEffect(() => {
       console.log("bar.bar_id ", bar.bar_id)
       axiosBackendInstance
@@ -30,7 +30,7 @@ export const BarInfoComponent = props => {
         })
         .then(response => {
           console.log('getphotos response.data', response.data);
-          photos = response.data
+          setPhotos(response.data);
           console.log('PHOTOS', photos);
         })
         .catch(function (error) {
@@ -62,6 +62,23 @@ export const BarInfoComponent = props => {
         <Stack space={1} pt={8} alignItems="center">
           <VStack space={3} alignItems="center">
             {/* TODO: replace image links, figure out how to display seamlessly with .map */}
+    {
+      photos.map((photo) => (
+        <HStack space={3}>
+              <Image
+                source={{
+                  uri: photo
+                }}
+                alt="Photo of xyz"
+                size="xl"
+                blurRadius={blurRadius}
+              />
+        </HStack>
+      ))
+    }
+
+{/* 
+
             <HStack space={3}>
               <Image
                 source={{
@@ -102,7 +119,7 @@ export const BarInfoComponent = props => {
                 size="xl"
                 blurRadius={blurRadius}
               />
-            </HStack>
+            </HStack> */}
           </VStack>
         </Stack>
         <Box alignItems="center" pt={8}>

@@ -58,7 +58,7 @@ export const Map = ({ navigation }) => {
         />
       </Box>
       <Box
-        h="50%"
+        h="100%"
         w={{
           base: '100%',
           md: '25%',
