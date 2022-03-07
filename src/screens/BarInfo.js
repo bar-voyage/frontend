@@ -93,16 +93,11 @@ export const BarInfo = ({ route, navigation }) => {
           })
           .then(response => {
             console.log('response.data', response);
-            // toast.show({
-            //   title: 'Submitted',
-            //   status: 'success',
-            //   description: `Thanks! We appreciate you 💛 \nYour rating was ${rating}`,
-            // });
             success += 1
           });
           /* TODO: update content viewable if they uploaded a picture */
           axiosBackendInstance
-            .post('/content_view', {
+            .post('/set_content_view', {
                 'user_id': user_id,
                 'content_view': 1
             })
@@ -118,6 +113,26 @@ export const BarInfo = ({ route, navigation }) => {
               console.log('response.data', response);
             });
         }
+
+        /* TODO: update the current bar status */
+        axiosBackendInstance
+          .post('/set_current_bar', {
+            bar_id: bar_id,
+            user_id: user_id,
+          })
+          .catch(function (error) {
+            console.log(error.toJSON());
+            toast.show({
+              title: 'Oops! Something went wrong',
+              status: 'error',
+              description: `Our team is working on it - please try again later!`,
+            });
+          })
+          .then(response => {
+            success++;
+            console.log('update current bar response: ', response);
+          });
+
     })
     axiosBackendInstance
       .post('/rating', {
@@ -142,8 +157,6 @@ export const BarInfo = ({ route, navigation }) => {
           });
         }
       });
-
-    /* TODO: update the current bar status */
   };
 
   const selectImage = async () => {
