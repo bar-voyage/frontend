@@ -27,6 +27,21 @@ const headerOptions = {
   },
 };
 
+const loginHeader = {
+  options: {
+    headerTitle: () => (
+      <View>
+        <Image
+          source={require('../../assets/header-logo.png')}
+          style={styles.headerLogo}
+          alt="bar voyage header logo"
+        />
+      </View>
+    ),
+    // headerRight: () => <HeaderMenu />,
+  },
+};
+
 const styles = StyleSheet.create({
   headerLogo: {
     height: 50,
@@ -36,7 +51,7 @@ const styles = StyleSheet.create({
 
 export const Main = () => (
   <MainStack.Navigator>
-    <MainStack.Screen name="Login" component={Login} {...headerOptions} />
+    <MainStack.Screen name="Login" component={Login} {...loginHeader}/>
     <MainStack.Screen name="SignUp" component={SignUp} {...headerOptions} />
     <MainStack.Screen name="Survey" component={Survey} {...headerOptions} />
     <MainStack.Screen name="Map" component={Map} {...headerOptions} />
