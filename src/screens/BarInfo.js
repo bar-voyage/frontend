@@ -121,7 +121,7 @@ export const BarInfo = ({ route, navigation }) => {
             user_id: user_id,
           })
           .catch(function (error) {
-            console.log(error.toJSON());
+            console.log("setting current bar:" + error.toJSON());
             toast.show({
               title: 'Oops! Something went wrong',
               status: 'error',
@@ -134,30 +134,33 @@ export const BarInfo = ({ route, navigation }) => {
           });
 
     })
-    axiosBackendInstance
-      .post('/rating', {
-        bar_id: bar_id,
-        num_stars: rating,
-      })
-      .catch(function (error) {
-        console.log(error.toJSON());
-        toast.show({
-          title: 'Oops! Something went wrong',
-          status: 'error',
-          description: `Our team is working on it - please try again later!`,
+    AsyncStorage.getItem('user_id').then(user_id => {
+      axiosBackendInstance
+        .post('/rating', {
+          bar_id: bar_id,
+          num_stars: rating,
+            user_id: user_id
+        })
+        .catch(function (error) {
+          console.log(error.toJSON());
+          toast.show({
+            title: 'Oops! Something went wrong',
+            status: 'error',
+            description: `Our team is working on it - please try again later!`,
+          });
+        })
+        .then(response => {
+          console.log('response.data', response);
+          if(success > 0) {
+            toast.show({
+              title: 'Submitted',
+              status: 'success',
+              description: `Thanks! We appreciate you 💛 \nYour rating was ${rating}`,
+            });
+          }
         });
       })
-      .then(response => {
-        console.log('response.data', response);
-        if(success > 0) {
-          toast.show({
-            title: 'Submitted',
-            status: 'success',
-            description: `Thanks! We appreciate you 💛 \nYour rating was ${rating}`,
-          });
-        }
-      });
-  };
+    };
 
   const selectImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
