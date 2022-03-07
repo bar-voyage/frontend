@@ -12,18 +12,31 @@ import {
 import { DetailsRow } from './DetailsRow';
 import { ChooseBarButton } from './ChooseBarButton';
 import { axiosBackendInstance } from '../../axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const BarInfoComponent = props => {
   const { bar, blurContent, onPressChooseBar } = props;
   const blurRadius = blurContent ? 5 : 0;
 
   const address = `${bar.address}, ${bar.city}, ${bar.state} ${bar.zip}`;
-  //const photos = [];
   const [photos, setPhotos] = useState([]);
-  //const noPhoto = 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fstock.adobe.com%2Fsearch%2Fimages%3Fk%3Dno%2520image%2520available&psig=AOvVaw0kCCzL6sW8SwBI87tBvBwh&ust=1645476984823000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCMDm3JuWj_YCFQAAAAAdAAAAABAD';
+  const [contentViewable, setContentViewable] = useState(1)
   
   React.useEffect(() => {
-      console.log("bar.bar_id ", bar.bar_id)
+      AsyncStorage.getItem('user_id').then(value => {
+        axiosBackendInstance
+        .post('/get_content_view', {
+          user_id: value
+        })
+        .then(response => {
+          console.log('content viewable: ', response.data.content_viewable)
+          setContentViewable(response.data.content_viewable)
+        })
+        .catch(function (error) {
+          console.log('error!')
+        })
+      });
+
       axiosBackendInstance
         .post('/get_photos', {
           bar_id: bar.bar_id,
