@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { SectionList, StyleSheet, Text, View, Header } from 'react-native'
-import { createStackNavigator } from '@react-navigation/stack'
+import React from "react";
+import { FlatList, StyleSheet, Text, View, Header } from 'react-native'
+import { TouchableOpacity } from 'react-native';
+import { RecommendationCard } from '../components/RecommendationCard';
 
-// const Stack = create
 
-export const Settings = () => {
+export const Settings = ({navigation}) => {
     const styles = StyleSheet.create({
         container: {
             flex: 1,
@@ -28,21 +28,26 @@ export const Settings = () => {
 
     return (
         <View style={styles.container}>
-            <SectionList
-                sections={[
-                    { title: 'Account Information', data: ['View and update your info'] },
-                    { title: 'Past Bars', data: ['Review all your past visits'] },
+            <FlatList
+                data = {[
+                    {name: 'View Past Bars', page: 'PastBars'},
+                    {name: 'View/Edit Account Information', page: 'AcctInfo'}
                 ]}
-                renderItem={({ item }) => <Text style={styles.item}>{item}</Text>}
-                renderSectionHeader={({ section }) => <Text style={styles.sectionHeader}>{section.title}</Text>}
-                keyExtractor={(item, index) => index}
+                renderItem={({ item }) => (
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate(item.page)}
+                    >
+                      <RecommendationCard
+                        name={item.name}
+                        avgStars={0}
+                        imageUrl={''}
+                      />
+                    </TouchableOpacity>
+                  )}
+                  keyExtractor={item => item.name}
             />
         </View>
 
     );
-
-
-
-
 };
 

@@ -9,6 +9,8 @@ import { SignUp } from '../screens/SignUp';
 import { Survey } from '../screens/Survey';
 import { BarInfo } from '../screens/BarInfo';
 import { Map } from '../screens/Map';
+import { Settings } from '../screens/Settings';
+import { PastBars } from '../screens/PastBars';
 
 const MainStack = createStackNavigator();
 
@@ -41,5 +43,7 @@ export const Main = () => (
     <MainStack.Screen name="Survey" component={Survey} {...headerOptions} />
     <MainStack.Screen name="Map" component={Map} {...headerOptions} />
     <MainStack.Screen name="BarInfo" component={BarInfo} {...headerOptions} />
+    <MainStack.Screen name="Settings" component={Settings} {...headerOptions} />
+    <MainStack.Screen name="PastBars" component={PastBars} {...headerOptions} />
   </MainStack.Navigator>
 );

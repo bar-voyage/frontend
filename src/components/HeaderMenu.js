@@ -22,6 +22,11 @@ export const HeaderMenu = () => {
       })
       .catch(error => alert(error.message));
   };
+
+  const handleSettings = () => {
+      navigation.navigate('Settings');
+  };
+
   return (
     <Menu
       trigger={triggerProps => {
@@ -42,7 +47,9 @@ export const HeaderMenu = () => {
       </Menu.Item>
       <Divider />
       <Menu.Item>
-        <Text>Settings</Text>
+      <Pressable onPress={handleSettings}>
+          <Text>Settings</Text>
+        </Pressable>
       </Menu.Item>
       <Menu.Item>
         <Text>Privacy Policy</Text>
