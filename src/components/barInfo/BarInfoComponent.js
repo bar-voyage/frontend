@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Image,
@@ -11,12 +11,45 @@ import {
 } from 'native-base';
 import { DetailsRow } from './DetailsRow';
 import { ChooseBarButton } from './ChooseBarButton';
+import { axiosBackendInstance } from '../../axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const BarInfoComponent = props => {
   const { bar, blurContent, onPressChooseBar } = props;
   const blurRadius = blurContent ? 5 : 0;
 
   const address = `${bar.address}, ${bar.city}, ${bar.state} ${bar.zip}`;
+  const [photos, setPhotos] = useState([]);
+  const [contentViewable, setContentViewable] = useState(1)
+  
+  React.useEffect(() => {
+      AsyncStorage.getItem('user_id').then(value => {
+        axiosBackendInstance
+        .post('/get_content_view', {
+          user_id: value
+        })
+        .then(response => {
+          console.log('content viewable: ', response.data.content_viewable)
+          setContentViewable(response.data.content_viewable)
+        })
+        .catch(function (error) {
+          console.log('error!')
+        })
+      });
+
+      axiosBackendInstance
+        .post('/get_photos', {
+          bar_id: bar.bar_id,
+        })
+        .then(response => {
+          console.log('getphotos response.data', response.data);
+          setPhotos(response.data);
+          console.log('PHOTOS', photos);
+        })
+        .catch(function (error) {
+          console.log("No photos")
+        });
+  }, []);
 
   return (
     <Container>
@@ -42,11 +75,28 @@ export const BarInfoComponent = props => {
         <Stack space={1} pt={8} alignItems="center">
           <VStack space={3} alignItems="center">
             {/* TODO: replace image links, figure out how to display seamlessly with .map */}
+    {
+      photos.map((photo) => (
+        <HStack space={3}>
+              <Image
+                source={{
+                  uri: photo
+                }}
+                alt="Photo of xyz"
+                size="xl"
+                blurRadius={blurRadius}
+              />
+        </HStack>
+      ))
+    }
+
+{/* 
+
             <HStack space={3}>
               <Image
                 source={{
-                  uri: 'https://gwtoday.gwu.edu/sites/g/files/zaxdzs1531/f/styles/gw_editorial_article_full/public/image/SEH17_SEH_UP_2015-WLA_6446_1080x.jpg?itok=9egdRwXz',
-                  // uri: bar.imageLinks[0],
+                  //uri: 'https://gwtoday.gwu.edu/sites/g/files/zaxdzs1531/f/styles/gw_editorial_article_full/public/image/SEH17_SEH_UP_2015-WLA_6446_1080x.jpg?itok=9egdRwXz',
+                  uri: photos[0] != undefined ? photos[0] : 'https://gwtoday.gwu.edu/sites/g/files/zaxdzs1531/f/styles/gw_editorial_article_full/public/image/SEH17_SEH_UP_2015-WLA_6446_1080x.jpg?itok=9egdRwXz',
                 }}
                 alt="Photo of xyz"
                 size="xl"
@@ -82,7 +132,7 @@ export const BarInfoComponent = props => {
                 size="xl"
                 blurRadius={blurRadius}
               />
-            </HStack>
+            </HStack> */}
           </VStack>
         </Stack>
         <Box alignItems="center" pt={8}>

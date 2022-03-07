@@ -14,8 +14,10 @@ import {
 import { MaterialIcons } from '@expo/vector-icons';
 import { FaStar } from 'react-icons/fa';
 import * as ImagePicker from 'expo-image-picker';
+//import { launchImageLibrary } from 'react-native-image-picker';
 import { BarInfoComponent } from '../components/barInfo/BarInfoComponent';
 import { axiosBackendInstance } from '../axios';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Star = ({ filled, onClick }) => {
   return (
@@ -65,37 +67,76 @@ export const BarInfo = ({ route, navigation }) => {
   const toast = useToast();
   const [rating, setRating] = useState(0);
   const [image, setImage] = useState(null);
+  const [imagetype, setImagetype] = useState('');
+  const [filename, setFilename] = useState('');
 
   const sendRating = () => {
-    const formData = new FormData();
-    console.log('image', image);
-    formData.append('photo', image, 'photo.png');
-    formData.append('bar_id', 1);
-    formData.append('user_id', 55);
-    axiosBackendInstance
-      .post('/upload_photo', {
-        data: formData,
-        headers: { 'Content-Type': 'multipart/form-data' },
-      })
-      .catch(function (error) {
-        console.log(error.toJSON());
-        toast.show({
-          title: 'Oops! Something went wrong',
-          status: 'error',
-          description: `Our team is working on it - please try again later!`,
-        });
-      })
-      .then(response => {
-        console.log('response.data', response);
-        // toast.show({
-        //   title: 'Submitted',
-        //   status: 'success',
-        //   description: `Thanks! We appreciate you 💛 \nYour rating was ${rating}`,
-        // });
-      });
+    let success = 0
+    AsyncStorage.getItem('user_id').then(user_id => {
+      /* only upload if there's a picture there */
+      if(image != null) {
+        axiosBackendInstance
+          .post('/upload_photo', {
+              'bar_id': bar_id,
+              'user_id': user_id,
+              'photo': image,
+              'phototype': imagetype,
+              'filename': filename
+          })
+          .catch(function (error) {
+            console.log(error.toJSON());
+            toast.show({
+              title: 'Oops! Something went wrong',
+              status: 'error',
+              description: `Our team is working on it - please try again later!`,
+            });
+          })
+          .then(response => {
+            console.log('response.data', response);
+            success += 1
+          });
+          /* TODO: update content viewable if they uploaded a picture */
+          axiosBackendInstance
+            .post('/set_content_view', {
+                'user_id': user_id,
+                'content_view': 1
+            })
+            .catch(function (error) {
+              console.log(error.toJSON());
+              toast.show({
+                title: 'Oops! Something went wrong',
+                status: 'error',
+                description: `Our team is working on it - please try again later!`,
+              });
+            })
+            .then(response => {
+              console.log('response.data', response);
+            });
+        }
+
+        /* TODO: update the current bar status */
+        axiosBackendInstance
+          .post('/set_current_bar', {
+            bar_id: bar_id,
+            user_id: user_id,
+          })
+          .catch(function (error) {
+            console.log(error.toJSON());
+            toast.show({
+              title: 'Oops! Something went wrong',
+              status: 'error',
+              description: `Our team is working on it - please try again later!`,
+            });
+          })
+          .then(response => {
+            success++;
+            console.log('update current bar response: ', response);
+          });
+
+    })
     axiosBackendInstance
       .post('/rating', {
-        bar_id: 1,
+        bar_id: bar_id,
         num_stars: rating,
       })
       .catch(function (error) {
@@ -108,11 +149,13 @@ export const BarInfo = ({ route, navigation }) => {
       })
       .then(response => {
         console.log('response.data', response);
-        toast.show({
-          title: 'Submitted',
-          status: 'success',
-          description: `Thanks! We appreciate you 💛 \nYour rating was ${rating}`,
-        });
+        if(success > 0) {
+          toast.show({
+            title: 'Submitted',
+            status: 'success',
+            description: `Thanks! We appreciate you 💛 \nYour rating was ${rating}`,
+          });
+        }
       });
   };
 
@@ -124,13 +167,17 @@ export const BarInfo = ({ route, navigation }) => {
       quality: 1,
     });
 
-    console.log(result);
-
     if (!result.cancelled) {
       const response = await fetch(result.uri);
       const blob = await response.blob();
-      console.log('blooob', blob);
-      setImage(blob);
+
+      let filename = result.uri.substring(50,100)
+      filename = filename.replace(/[^a-zA-Z0-9]/g, '');
+
+      setImage(result.uri);
+      setFilename(filename)
+      setImagetype(blob.type);
+
     }
   };
 
