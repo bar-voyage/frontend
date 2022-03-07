@@ -139,7 +139,7 @@ export const BarInfo = ({ route, navigation }) => {
         .post('/rating', {
           bar_id: bar_id,
           num_stars: rating,
-            user_id: user_id
+          user_id: user_id
         })
         .catch(function (error) {
           console.log(error.toJSON());

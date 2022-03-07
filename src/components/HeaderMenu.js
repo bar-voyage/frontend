@@ -18,6 +18,7 @@ export const HeaderMenu = () => {
     auth
       .signOut()
       .then(() => {
+        setUserName('');
         navigation.navigate('Login');
         toast.show({
           title: 'Logged out',
