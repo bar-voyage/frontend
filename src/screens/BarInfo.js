@@ -65,6 +65,9 @@ export const BarInfo = ({ route, navigation }) => {
   const toast = useToast();
   const [rating, setRating] = useState(0);
   const [image, setImage] = useState(null);
+  const [blurry, setBlurry] = useState(true);
+
+
 
   const sendRating = () => {
     const formData = new FormData();
@@ -72,6 +75,7 @@ export const BarInfo = ({ route, navigation }) => {
     formData.append('photo', image, 'photo.png');
     formData.append('bar_id', 1);
     formData.append('user_id', 55);
+
     axiosBackendInstance
       .post('/upload_photo', {
         data: formData,
@@ -87,11 +91,6 @@ export const BarInfo = ({ route, navigation }) => {
       })
       .then(response => {
         console.log('response.data', response);
-        // toast.show({
-        //   title: 'Submitted',
-        //   status: 'success',
-        //   description: `Thanks! We appreciate you 💛 \nYour rating was ${rating}`,
-        // });
       });
     axiosBackendInstance
       .post('/rating', {
@@ -108,6 +107,7 @@ export const BarInfo = ({ route, navigation }) => {
       })
       .then(response => {
         console.log('response.data', response);
+        setBlurry(false);
         toast.show({
           title: 'Submitted',
           status: 'success',
@@ -134,6 +134,7 @@ export const BarInfo = ({ route, navigation }) => {
     }
   };
 
+
   return (
     <Center>
       <Modal isOpen={showModal} onClose={() => setShowModal(false)} size="xl">
@@ -147,11 +148,8 @@ export const BarInfo = ({ route, navigation }) => {
               <HStack pb={5} space="sm">
                 {Array(5)
                   .fill()
-                  // eslint-disable-next-line no-unused-vars
                   .map((_, i) => (
-                    // <MaterialIcons name="star-outline" size={56} key={i}
                     <Star
-                      // eslint-disable-next-line react/no-array-index-key
                       key={i}
                       filled={i < rating}
                       onClick={() => setRating(i + 1)}
@@ -215,8 +213,9 @@ export const BarInfo = ({ route, navigation }) => {
         </Modal.Content>
       </Modal>
       <BarInfoComponent
+
         bar={route.params}
-        blurContent={false}
+        blurContent={blurry}
         onPressChooseBar={() => setShowModal(true)}
       />
     </Center>
