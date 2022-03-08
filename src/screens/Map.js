@@ -7,7 +7,11 @@ import MapView from 'react-native-web-maps';
 import { RecommendationCard } from '../components/RecommendationCard';
 import { axiosBackendInstance } from '../axios';
 
-export const Map = ({ navigation }) => {
+export const Map = ({ route, navigation }) => {
+  console.log('ROUTE.PARAMS', route.params);
+  const { coords, timestamp } = route.params;
+  console.log('coords', coords);
+  console.log('timestamp', timestamp);
   const [bars, setBars] = useState([]);
   console.log('bars in beginning', bars);
 
@@ -44,8 +48,8 @@ export const Map = ({ navigation }) => {
 
   return (
     <>
-      {/* <Box
-        h="50%"
+      <Box
+        h="20%"
         w={{
           base: '100%',
           md: '25%',
@@ -53,13 +57,22 @@ export const Map = ({ navigation }) => {
       >
         <MapView
           initialRegion={{
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
+            latitude: coords.latitude,
+            longitude: coords.longitude,
+            latitudeDelta: 0.04,
+            longitudeDelta: 0.04,
           }}
-        />
-      </Box> */}
+        >
+          {bars.map((bar, index) => (
+            <MapView.Marker
+              key={index}
+              coordinate={{ latitude: bar.latitude, longitude: bar.longitude }}
+              title={bar.name}
+              // description={marker.description}
+            />
+          ))}
+        </MapView>
+      </Box>
       <Box
         h="100%"
         w={{

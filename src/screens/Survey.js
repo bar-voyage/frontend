@@ -9,37 +9,40 @@ import {
   Text,
   VStack,
 } from 'native-base';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
 import { axiosBackendInstance } from '../axios';
 
 export const Survey = ({ navigation }) => {
   const [groupValues, setGroupValues] = React.useState([]);
-  const [userLocation, setLocation] = React.useState(null)
-  const [errorMsg, setErrorMsg] = React.useState()
-  const [username, setUserName] = React.useState()
+  const [location, setLocation] = React.useState(null);
+  const [errorMsg, setErrorMsg] = React.useState(null);
+  const [username, setUserName] = React.useState();
 
   AsyncStorage.getItem('user_name').then(value => {
-    setUserName(value)
-    console.log(value)
-  })
+    setUserName(value);
+    console.log(value);
+  });
+
+  React.useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+      console.log('location in Survey.js', location);
+    })();
+  }, []);
 
   const handleSubmitUserPrefs = () => {
     AsyncStorage.getItem('user_id').then(value => {
       console.log('groupValues', groupValues);
       console.log('user_id', value);
 
-      (async () => {
-        let { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== 'granted') {
-          setErrorMsg('Permission to access location was denied');
-          return;
-        }
-  
-        let location = await Location.getCurrentPositionAsync({});
-        console.log(location)
-        setLocation(location);
-      })();
       axiosBackendInstance
         .post('/user-pref', {
           pref: groupValues,
@@ -47,9 +50,8 @@ export const Survey = ({ navigation }) => {
         })
         .then(response => {
           console.log('user pref response', response);
-          navigation.navigate('Map');
+          navigation.navigate('Map', location);
         });
-      
     });
   };
 
