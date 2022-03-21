@@ -15,7 +15,7 @@ import { ChooseBarButton } from './ChooseBarButton';
 export const BarInfoComponent = props => {
   const { bar, blurContent, onPressChooseBar } = props;
   const blurRadius = blurContent ? 5 : 0;
-  console.log("blurry" + blurContent);
+  console.log("blurry: " + blurContent);
 
   const address = `${bar.address}, ${bar.city}, ${bar.state} ${bar.zip}`;
 
