@@ -75,14 +75,14 @@ export const BarInfo = ({ route, navigation }) => {
     let success = 0
     AsyncStorage.getItem('user_id').then(user_id => {
       /* only upload if there's a picture there */
-      if(image != null) {
+      if (image != null) {
         axiosBackendInstance
           .post('/upload_photo', {
-              'bar_id': bar_id,
-              'user_id': user_id,
-              'photo': image,
-              'phototype': imagetype,
-              'filename': filename
+            'bar_id': bar_id,
+            'user_id': user_id,
+            'photo': image,
+            'phototype': imagetype,
+            'filename': filename
           })
           .catch(function (error) {
             console.log(error.toJSON());
@@ -96,33 +96,14 @@ export const BarInfo = ({ route, navigation }) => {
             console.log('response.data', response);
             success += 1
           });
-          /* TODO: update content viewable if they uploaded a picture */
-          axiosBackendInstance
-            .post('/set_content_view', {
-                'user_id': user_id,
-                'content_view': 1
-            })
-            .catch(function (error) {
-              console.log(error.toJSON());
-              toast.show({
-                title: 'Oops! Something went wrong',
-                status: 'error',
-                description: `Our team is working on it - please try again later!`,
-              });
-            })
-            .then(response => {
-              console.log('response.data', response);
-            });
-        }
-
-        /* TODO: update the current bar status */
+        /* TODO: update content viewable if they uploaded a picture */
         axiosBackendInstance
-          .post('/set_current_bar', {
-            bar_id: bar_id,
-            user_id: user_id,
+          .post('/set_content_view', {
+            'user_id': user_id,
+            'content_view': 1
           })
           .catch(function (error) {
-            console.log("setting current bar:" + error.toJSON());
+            console.log(error.toJSON());
             toast.show({
               title: 'Oops! Something went wrong',
               status: 'error',
@@ -130,9 +111,28 @@ export const BarInfo = ({ route, navigation }) => {
             });
           })
           .then(response => {
-            success++;
-            console.log('update current bar response: ', response);
+            console.log('response.data', response);
           });
+      }
+
+      /* TODO: update the current bar status */
+      axiosBackendInstance
+        .post('/set_current_bar', {
+          bar_id: bar_id,
+          user_id: user_id,
+        })
+        .catch(function (error) {
+          console.log("setting current bar:" + error.toJSON());
+          toast.show({
+            title: 'Oops! Something went wrong',
+            status: 'error',
+            description: `Our team is working on it - please try again later!`,
+          });
+        })
+        .then(response => {
+          success++;
+          console.log('update current bar response: ', response);
+        });
 
     })
     AsyncStorage.getItem('user_id').then(user_id => {
@@ -152,7 +152,7 @@ export const BarInfo = ({ route, navigation }) => {
         })
         .then(response => {
           console.log('response.data', response);
-          if(success > 0) {
+          if (success > 0) {
             toast.show({
               title: 'Submitted',
               status: 'success',
@@ -160,8 +160,8 @@ export const BarInfo = ({ route, navigation }) => {
             });
           }
         });
-      })
-    };
+    })
+  };
 
   const selectImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -175,7 +175,7 @@ export const BarInfo = ({ route, navigation }) => {
       const response = await fetch(result.uri);
       const blob = await response.blob();
 
-      let filename = result.uri.substring(50,100)
+      let filename = result.uri.substring(50, 100)
       filename = filename.replace(/[^a-zA-Z0-9]/g, '');
 
       setImage(result.uri);
@@ -266,7 +266,7 @@ export const BarInfo = ({ route, navigation }) => {
       <BarInfoComponent
 
         bar={route.params}
-        blurContent={blurry}
+        // blurContent={blurry}
         onPressChooseBar={() => setShowModal(true)}
       />
     </Center>

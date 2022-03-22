@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, View, Text } from 'react-native';
 import { Box, FlatList, Heading, Image } from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RecommendationCard } from '../components/RecommendationCard';
 import { axiosBackendInstance } from '../axios';
 
 
-
-
 export const PastBars = ({ navigation }) => {
   const [bars, setBars] = useState([]);
 
-  console.log('Bars before:', bars)
+  console.log('Past Bars before:', bars)
   React.useEffect(() => {
     AsyncStorage.getItem('user_id').then(value => {
       console.log('user_id value', value);
@@ -22,12 +20,12 @@ export const PastBars = ({ navigation }) => {
         .then(response => {
           console.log('getPastBars response.data', response.data);
           setBars(response.data);
-          console.log('BARS', bars);
+          console.log('Past Bars BARS', bars);
         });
     });
   }, []);
 
-  console.log('Bars after:', bars);
+
   return (
 
     <>
@@ -41,25 +39,33 @@ export const PastBars = ({ navigation }) => {
         <Heading fontSize="xl" p="4" pb="3">
           Your Past Bars
         </Heading>
-        <FlatList
-          // data={[
-          //   { name: 'MadHatter', rating: 3 },
-          //   { name: 'Tokyo Pearl', rating: 4 }
-          // ]}
 
-          data={bars}
-          renderItem={({ item }) => (
+        <View>
+          {bars == null ?
+            (<FlatList
 
-            <RecommendationCard
-              name={item.name}
-              avgStars={item.rating}
-              imageUrl={item.img_url}
+              data={bars}
+              renderItem={({ item }) => (
 
-            />
-          )}
-          keyExtractor={item => item.bar_id}
-        />
+                <RecommendationCard
+                  name={item.name}
+                  avgStars={item.rating}
+                  imageUrl={item.img_url}
+
+                />
+              )}
+              keyExtractor={item => item.bar_id}
+            />)
+
+            :
+
+            (<Text> No Past Bars to View </Text>)
+          }
+        </View>
+
+
       </Box>
+
     </>
   );
 }

@@ -17,15 +17,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const BarInfoComponent = props => {
   const { bar, blurContent, onPressChooseBar } = props;
   const blurRadius = blurContent ? 5 : 0;
-  console.log("blurry: " + blurContent);
+  // console.log("blurry: " + blurContent);
 
   const address = `${bar.address}, ${bar.city}, ${bar.state} ${bar.zip}`;
   const [photos, setPhotos] = useState([]);
   const [contentViewable, setContentViewable] = useState(1)
-  
+
   React.useEffect(() => {
-      AsyncStorage.getItem('user_id').then(value => {
-        axiosBackendInstance
+    AsyncStorage.getItem('user_id').then(value => {
+      axiosBackendInstance
         .post('/get_content_view', {
           user_id: value
         })
@@ -36,20 +36,20 @@ export const BarInfoComponent = props => {
         .catch(function (error) {
           console.log('error!')
         })
-      });
+    });
 
-      axiosBackendInstance
-        .post('/get_photos', {
-          bar_id: bar.bar_id,
-        })
-        .then(response => {
-          console.log('getphotos response.data', response.data);
-          setPhotos(response.data);
-          console.log('PHOTOS', photos);
-        })
-        .catch(function (error) {
-          console.log("No photos")
-        });
+    axiosBackendInstance
+      .post('/get_photos', {
+        bar_id: bar.bar_id,
+      })
+      .then(response => {
+        console.log('getphotos response.data', response.data);
+        setPhotos(response.data);
+        console.log('PHOTOS', photos);
+      })
+      .catch(function (error) {
+        console.log("No photos")
+      });
   }, []);
 
   return (
@@ -76,22 +76,22 @@ export const BarInfoComponent = props => {
         <Stack space={1} pt={8} alignItems="center">
           <VStack space={3} alignItems="center">
             {/* TODO: replace image links, figure out how to display seamlessly with .map */}
-    {
-      photos.map((photo) => (
-        <HStack space={3}>
-              <Image
-                source={{
-                  uri: photo
-                }}
-                alt="Photo of xyz"
-                size="xl"
-                blurRadius={blurRadius}
-              />
-        </HStack>
-      ))
-    }
+            {
+              photos.map((photo) => (
+                <HStack space={3}>
+                  <Image
+                    source={{
+                      uri: photo
+                    }}
+                    alt="Photo of xyz"
+                    size="xl"
+                    blurRadius={blurRadius}
+                  />
+                </HStack>
+              ))
+            }
 
-{/* 
+            {/* 
 
             <HStack space={3}>
               <Image
