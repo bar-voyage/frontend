@@ -5,23 +5,31 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { Button, Center, Heading, HStack, Text, useToast } from 'native-base';
+import { Button, Center, Heading, HStack, Text, useToast, Radio } from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { auth } from '../../firebase';
 import { axiosBackendInstance } from '../axios';
 
 export const SignUp = () => {
   const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
+  const [fname, setFName] = useState('');
+  const [lname, setLName] = useState('');
   const [password, setPassword] = useState('');
+  const [age, setAge] = useState('');
+  const [gender, setGender] = useState('');
 
   const toast = useToast();
 
-  const registerUser = (userEmail, userPassword) => {
+  const registerUser = (userEmail, userPassword, userFName, userLName, userGender, userAge) => {
+    console.log(userFName, userLName, userGender, userAge)
     axiosBackendInstance
       .post('/register', {
         email: userEmail,
         password: userPassword,
+        fname: userFName,
+        lname: userLName,
+        gender: userGender,
+        age: userAge
       })
       .then(response => {
         console.log('registerUser response', response);
@@ -32,6 +40,10 @@ export const SignUp = () => {
           })
           .then(res => {
             AsyncStorage.setItem('user_id', res.data.user_id);
+            AsyncStorage.setItem('user_name', res.data.fname)
+            AsyncStorage.getItem('user_name').then(value => {
+              console.log('user name value in sign up: ', value)
+            })
             AsyncStorage.getItem('user_id').then(value => {
               console.log('user_id value IN SIGNUP', value);
             });
@@ -40,19 +52,27 @@ export const SignUp = () => {
   };
 
   const handleSignUp = () => {
-    auth
-      .createUserWithEmailAndPassword(email, password)
-      .then(userCredentials => {
-        const user = userCredentials.user;
-        registerUser(user.email, password);
-        console.log('Registered with:', user.email);
-        toast.show({
-          title: 'Account created',
-          status: 'success',
-          description: `Now let's get this show on the road! 🥳`,
-        });
-      })
-      .catch(error => alert(error.message));
+    if (fname == '' || lname == ''){
+      alert("please enter a name")
+    }
+    if(age < 21) {
+      alert("anyone under 21 should not use bar voyage!");
+    }
+    else{
+      auth
+        .createUserWithEmailAndPassword(email, password)
+        .then(userCredentials => {
+          const user = userCredentials.user;
+          registerUser(user.email, password, fname, lname, gender, age);
+          console.log('Registered with:', user.email, fname, lname, gender, age);
+          toast.show({
+            title: 'Account created',
+            status: 'success',
+            description: `Now let's get this show on the road! 🥳`,
+          });
+        })
+        .catch(error => alert(error.message));
+    }
   };
 
   return (
@@ -70,9 +90,15 @@ export const SignUp = () => {
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <View style={styles.inputContainer}>
           <TextInput
-            placeholder="Name"
-            value={name}
-            onChangeText={text => setName(text)}
+            placeholder="First Name"
+            value={fname}
+            onChangeText={text => setFName(text)}
+            style={styles.input}
+          />
+           <TextInput
+            placeholder="Last Name"
+            value={lname}
+            onChangeText={text => setLName(text)}
             style={styles.input}
           />
           <TextInput
@@ -88,6 +114,30 @@ export const SignUp = () => {
             style={styles.input}
             secureTextEntry
           />
+          <TextInput
+            placeholder="Age"
+            value={age}
+            onChangeText={text => setAge(text)}
+            style={styles.input}
+          />
+          <Radio.Group
+            style={styles.radio}
+            name="Gender"
+            value={gender}
+            onChange={(nextValue) => {
+              setGender(nextValue);
+            }}
+          >
+            <Radio value="F" my="1">
+              Female
+            </Radio>
+            <Radio value="M" my="1">
+              Male
+            </Radio>
+            <Radio value="NB" my="1">
+              Nonbinary
+            </Radio>
+          </Radio.Group>
         </View>
 
         <View style={styles.buttonContainer}>
@@ -134,4 +184,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingVertical: 15,
   },
+  radio: {
+    justifyContent: 'center',
+    alignItems: 'left'
+  }
 });

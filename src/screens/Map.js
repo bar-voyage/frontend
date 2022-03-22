@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import { TouchableOpacity } from 'react-native';
-import { Box, FlatList, Heading, Image } from 'native-base';
+import { Box, FlatList, Heading } from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import GetLocation from 'react-native-get-location';
+import MapView from 'react-native-web-maps';
 import { RecommendationCard } from '../components/RecommendationCard';
 import { axiosBackendInstance } from '../axios';
-import GetLocation from 'react-native-get-location'
 
-
-export const Map = ({ navigation }) => {
+export const Map = ({ route, navigation }) => {
+  console.log('ROUTE.PARAMS', route.params);
+  const { coords, timestamp } = route.params;
+  console.log('coords', coords);
+  console.log('timestamp', timestamp);
   const [bars, setBars] = useState([]);
   console.log('bars in beginning', bars);
 
@@ -45,22 +49,32 @@ export const Map = ({ navigation }) => {
   return (
     <>
       <Box
-        h="50%"
+        h="20%"
         w={{
           base: '100%',
           md: '25%',
         }}
       >
-        <Image
-          style={{ width: '100%', height: '100%' }}
-          source={{
-            uri: 'https://www.thehotelguru.com/static-maps/collections/9723.png',
+        <MapView
+          initialRegion={{
+            latitude: coords.latitude,
+            longitude: coords.longitude,
+            latitudeDelta: 0.04,
+            longitudeDelta: 0.04,
           }}
-          alt="dummy map image"
-        />
+        >
+          {bars.map((bar, index) => (
+            <MapView.Marker
+              key={index}
+              coordinate={{ latitude: bar.latitude, longitude: bar.longitude }}
+              title={bar.name}
+              // description={marker.description}
+            />
+          ))}
+        </MapView>
       </Box>
       <Box
-        h="50%"
+        h="100%"
         w={{
           base: '100%',
           md: '25%',
@@ -69,7 +83,6 @@ export const Map = ({ navigation }) => {
         <Heading fontSize="xl" p="4" pb="3">
           Your Recommendations
         </Heading>
-        {/* {bars && ( */}
         <FlatList
           data={bars}
           renderItem={({ item }) => (
@@ -85,7 +98,6 @@ export const Map = ({ navigation }) => {
           )}
           keyExtractor={item => item.bar_id}
         />
-        {/* )} */}
       </Box>
     </>
   );

@@ -40,7 +40,7 @@ export const Login = () => {
       })
       .then(response => {
         console.log('response for login get', response);
-        console.log('response.data.user_id', response.data.user_id);
+        console.log('response.data.user_id', response.data);
         AsyncStorage.setItem('user_id', response.data.user_id);
       });
     auth

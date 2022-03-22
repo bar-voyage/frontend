@@ -50,13 +50,13 @@ export const RecommendationCard = props => {
                 // eslint-disable-next-line react/no-array-index-key
                 <Badge key={i}>{c}</Badge>
               ))} */}
-              {Array(avgStars)
+              {Array(Math.round(avgStars))
                 .fill()
                 .map((_, i) => (
                   // eslint-disable-next-line react/no-array-index-key
                   <MaterialIcons name="star" size={22} key={i} />
                 ))}
-              {Array(5 - avgStars)
+              {Array(5 - Math.round(avgStars))
                 .fill()
                 .map((_, i) => (
                   // eslint-disable-next-line react/no-array-index-key
