@@ -17,6 +17,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const BarInfoComponent = props => {
   const { bar, blurContent, onPressChooseBar } = props;
   const blurRadius = blurContent ? 5 : 0;
+  console.log("blurry: " + blurContent);
 
   const address = `${bar.address}, ${bar.city}, ${bar.state} ${bar.zip}`;
   const [photos, setPhotos] = useState([]);

@@ -67,6 +67,7 @@ export const BarInfo = ({ route, navigation }) => {
   const toast = useToast();
   const [rating, setRating] = useState(0);
   const [image, setImage] = useState(null);
+
   const [imagetype, setImagetype] = useState('');
   const [filename, setFilename] = useState('');
 
@@ -184,6 +185,7 @@ export const BarInfo = ({ route, navigation }) => {
     }
   };
 
+
   return (
     <Center>
       <Modal isOpen={showModal} onClose={() => setShowModal(false)} size="xl">
@@ -197,11 +199,8 @@ export const BarInfo = ({ route, navigation }) => {
               <HStack pb={5} space="sm">
                 {Array(5)
                   .fill()
-                  // eslint-disable-next-line no-unused-vars
                   .map((_, i) => (
-                    // <MaterialIcons name="star-outline" size={56} key={i}
                     <Star
-                      // eslint-disable-next-line react/no-array-index-key
                       key={i}
                       filled={i < rating}
                       onClick={() => setRating(i + 1)}
@@ -265,8 +264,9 @@ export const BarInfo = ({ route, navigation }) => {
         </Modal.Content>
       </Modal>
       <BarInfoComponent
+
         bar={route.params}
-        blurContent={false}
+        blurContent={blurry}
         onPressChooseBar={() => setShowModal(true)}
       />
     </Center>
