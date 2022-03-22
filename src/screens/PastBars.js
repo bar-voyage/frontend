@@ -5,29 +5,31 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RecommendationCard } from '../components/RecommendationCard';
 import { axiosBackendInstance } from '../axios';
 
+
+
+
 export const PastBars = ({ navigation }) => {
-    const [bars, setBars] = useState([]);
-  
-    React.useEffect(() => {
-      AsyncStorage.getItem('user_id').then(value => {
-        console.log('user_id value', value);
-        axiosBackendInstance
-          .post('/past_bars', {
-            user_id: value,
-          })
-          .then(response => {
-            console.log('getPastBars response.data', response.data);
-            setBars(response.data);
-            console.log('BARS', bars);
-          })
-          .catch(error => {
-              console.log(error)
-          })
-      });
-    }, []);
+  const [bars, setBars] = useState([]);
 
+  console.log('Bars before:', bars)
+  React.useEffect(() => {
+    AsyncStorage.getItem('user_id').then(value => {
+      console.log('user_id value', value);
+      axiosBackendInstance
+        .post('/past_bars', {
+          user_id: value,
+        })
+        .then(response => {
+          console.log('getPastBars response.data', response.data);
+          setBars(response.data);
+          console.log('BARS', bars);
+        });
+    });
+  }, []);
 
+  console.log('Bars after:', bars);
   return (
+
     <>
       <Box
         h="100%"
@@ -39,24 +41,25 @@ export const PastBars = ({ navigation }) => {
         <Heading fontSize="xl" p="4" pb="3">
           Your Past Bars
         </Heading>
-        {/* {bars && ( */}
         <FlatList
+          // data={[
+          //   { name: 'MadHatter', rating: 3 },
+          //   { name: 'Tokyo Pearl', rating: 4 }
+          // ]}
+
           data={bars}
           renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() => navigation.navigate('BarInfo', item)}
-            >
-              <RecommendationCard
-                name={item.name}
-                avgStars={item.avg_stars}
-                imageUrl={item.img_url}
-              />
-            </TouchableOpacity>
+
+            <RecommendationCard
+              name={item.name}
+              avgStars={item.rating}
+              imageUrl={item.img_url}
+
+            />
           )}
           keyExtractor={item => item.bar_id}
         />
-        {/* )} */}
       </Box>
     </>
-    );
+  );
 }

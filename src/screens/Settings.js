@@ -1,10 +1,10 @@
 import React from "react";
 import { FlatList, StyleSheet, Text, View, Header } from 'react-native'
 import { TouchableOpacity } from 'react-native';
-import { RecommendationCard } from '../components/RecommendationCard';
+import { SettingCard } from '../components/SettingCard'
 
 
-export const Settings = ({navigation}) => {
+export const Settings = ({ navigation }) => {
     const styles = StyleSheet.create({
         container: {
             flex: 1,
@@ -29,22 +29,20 @@ export const Settings = ({navigation}) => {
     return (
         <View style={styles.container}>
             <FlatList
-                data = {[
-                    {name: 'View Past Bars', page: 'PastBars'},
-                    {name: 'View/Edit Account Information', page: 'AcctInfo'}
+                data={[
+                    { name: 'View Past Bars', page: 'PastBars' },
+                    { name: 'View/Edit Account Information', page: 'AcctInfo' }
                 ]}
                 renderItem={({ item }) => (
                     <TouchableOpacity
-                      onPress={() => navigation.navigate(item.page)}
+                        onPress={() => navigation.navigate(item.page)}
                     >
-                      <RecommendationCard
-                        name={item.name}
-                        avgStars={0}
-                        imageUrl={''}
-                      />
+                        <SettingCard
+                            name={item.name}
+                        />
                     </TouchableOpacity>
-                  )}
-                  keyExtractor={item => item.name}
+                )}
+                keyExtractor={item => item.name}
             />
         </View>
 
