@@ -42,15 +42,15 @@ export const AcctInfo = ({ navigation }) => {
     }
 
     const update_values = () => {
-        if (email == null && password == null) {
+        if (email == '' && password == '') {
             alert('Nothing to be Changed')
         } else {
-            if (email != null) {
+            if (email != '') {
                 changeEmail(current_password, email);
                 console.log('update_values email:', email);
             }
 
-            if (password != null) {
+            if (password != '') {
                 changePassword(current_password, password);
                 console.log('update_values password:', password);
             }
@@ -149,6 +149,7 @@ export const AcctInfo = ({ navigation }) => {
                     value={current_password}
                     onChangeText={text => setCurrentPassword(text)}
                     style={styles.input}
+                    secureTextEntry
                 />
 
                 <Text style={styles.text}>
@@ -156,7 +157,7 @@ export const AcctInfo = ({ navigation }) => {
                 </Text>
 
                 <TextInput
-                    placeholder="Email"
+                    placeholder="Change Email"
                     value={email}
                     onChangeText={text => setEmail(text)}
                     style={styles.input}
@@ -167,11 +168,11 @@ export const AcctInfo = ({ navigation }) => {
                 </Text>
 
                 <TextInput
-                    placeholder="Password"
+                    placeholder="Change Password"
                     value={password}
                     onChangeText={text => setPassword(text)}
                     style={styles.input}
-                // secureTextEntry
+                    secureTextEntry
                 />
             </View>
 
