@@ -4,15 +4,15 @@ import { Menu, Divider, Text, useToast } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { auth } from '../../firebase';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const HeaderMenu = () => {
   const navigation = useNavigation();
   const toast = useToast();
   const [username, setUserName] = useState('');
-  AsyncStorage.getItem("user_name").then( value => {
-    setUserName(value)
-  })
+  AsyncStorage.getItem('user_name').then(value => {
+    setUserName(value);
+  });
 
   const handleLogout = () => {
     auth
