@@ -155,9 +155,8 @@ export const BarInfo = ({ route, navigation }) => {
           success += 1;
           console.log('set current bar response: ', response);
         });
-    });
-    // Set content view value to 0 (locked/not viewable) since user has checked in but not yet uploaded photos
-    AsyncStorage.getItem('user_id').then(user_id => {
+
+      // Set content view value to 0 (locked/not viewable) since user has checked in but not yet uploaded photos
       axiosBackendInstance
         .post('/set_content_view', {
           content_view: 0,
@@ -175,9 +174,8 @@ export const BarInfo = ({ route, navigation }) => {
         .then(response => {
           console.log('set content view response', response);
         });
-    });
-    // Send star rating to backend
-    AsyncStorage.getItem('user_id').then(user_id => {
+
+      // Send star rating to backend
       axiosBackendInstance
         .post('/rating', {
           bar_id: bar_id,
@@ -415,7 +413,9 @@ export const BarInfo = ({ route, navigation }) => {
             <Button
               onPress={() => {
                 sendContentReview();
-                navigation.navigate('Map', location);
+                setShowUploadContentModal(false);
+                setShowAskForReviewModal(false);
+                // navigation.navigate('Map', location);
               }}
             >
               <Text style={styles.submitButtonText}>Submit</Text>
