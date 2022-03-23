@@ -42,9 +42,6 @@ export const Login = () => {
         console.log('response for login get', response);
         console.log('response.data.user_id', response.data);
         AsyncStorage.setItem('user_id', response.data.user_id);
-        AsyncStorage.setItem('user_name', response.data.fname);
-        // setBars(response.data);
-        // console.log(bars);
       });
     auth
       .signInWithEmailAndPassword(email, password)
