@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { TouchableOpacity } from 'react-native';
-import { Box, FlatList, Heading } from 'native-base';
+import { Box, FlatList, Heading, Spinner } from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Location from 'expo-location';
+// import * as Location from 'expo-location';
 import MapView from 'react-native-web-maps';
 import { RecommendationCard } from '../components/RecommendationCard';
 import { axiosBackendInstance } from '../axios';
@@ -52,7 +52,7 @@ export const Map = ({ route, navigation }) => {
           md: '25%',
         }}
       >
-        {/* {location && ( */}
+        {/* {location ? ( */}
         <MapView
           initialRegion={{
             // latitude: location.coords.latitude,
@@ -75,6 +75,8 @@ export const Map = ({ route, navigation }) => {
             />
           ))}
         </MapView>
+        {/* ) : ( */}
+        {/* <Spinner size="lg" /> */}
         {/* )} */}
       </Box>
       <Box

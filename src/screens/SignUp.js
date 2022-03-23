@@ -5,8 +5,17 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { Button, Center, Heading, HStack, Text, useToast, Radio } from 'native-base';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import {
+  Box,
+  Button,
+  Center,
+  Heading,
+  HStack,
+  Text,
+  useToast,
+  Radio,
+} from 'native-base';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { auth } from '../../firebase';
 import { axiosBackendInstance } from '../axios';
 
@@ -20,8 +29,15 @@ export const SignUp = () => {
 
   const toast = useToast();
 
-  const registerUser = (userEmail, userPassword, userFName, userLName, userGender, userAge) => {
-    console.log(userFName, userLName, userGender, userAge)
+  const registerUser = (
+    userEmail,
+    userPassword,
+    userFName,
+    userLName,
+    userGender,
+    userAge,
+  ) => {
+    console.log(userFName, userLName, userGender, userAge);
     axiosBackendInstance
       .post('/register', {
         email: userEmail,
@@ -29,7 +45,7 @@ export const SignUp = () => {
         fname: userFName,
         lname: userLName,
         gender: userGender,
-        age: userAge
+        age: userAge,
       })
       .then(response => {
         console.log('registerUser response', response);
@@ -40,10 +56,10 @@ export const SignUp = () => {
           })
           .then(res => {
             AsyncStorage.setItem('user_id', res.data.user_id);
-            AsyncStorage.setItem('user_name', res.data.fname)
+            AsyncStorage.setItem('user_name', res.data.fname);
             AsyncStorage.getItem('user_name').then(value => {
-              console.log('user name value in sign up: ', value)
-            })
+              console.log('user name value in sign up: ', value);
+            });
             AsyncStorage.getItem('user_id').then(value => {
               console.log('user_id value IN SIGNUP', value);
             });
@@ -52,19 +68,25 @@ export const SignUp = () => {
   };
 
   const handleSignUp = () => {
-    if (fname == '' || lname == ''){
-      alert("please enter a name")
+    if (fname == '' || lname == '') {
+      alert('please enter a name');
     }
-    if(age < 21) {
-      alert("anyone under 21 should not use bar voyage!");
-    }
-    else{
+    if (age < 21) {
+      alert('anyone under 21 should not use bar voyage!');
+    } else {
       auth
         .createUserWithEmailAndPassword(email, password)
         .then(userCredentials => {
           const user = userCredentials.user;
           registerUser(user.email, password, fname, lname, gender, age);
-          console.log('Registered with:', user.email, fname, lname, gender, age);
+          console.log(
+            'Registered with:',
+            user.email,
+            fname,
+            lname,
+            gender,
+            age,
+          );
           toast.show({
             title: 'Account created',
             status: 'success',
@@ -77,13 +99,11 @@ export const SignUp = () => {
 
   return (
     <Center>
-      <Heading size="4xl" pt={38}>
-        &nbsp;
-      </Heading>
+      <Heading size="xl">&nbsp;</Heading>
       <Heading size="2xl" pb={3}>
         Create Account
       </Heading>
-      <HStack pb={8}>
+      <HStack>
         <Text italic>Welcome! Bar hopping journeys await you</Text>
         <Text>🚢</Text>
       </HStack>
@@ -95,7 +115,7 @@ export const SignUp = () => {
             onChangeText={text => setFName(text)}
             style={styles.input}
           />
-           <TextInput
+          <TextInput
             placeholder="Last Name"
             value={lname}
             onChangeText={text => setLName(text)}
@@ -120,24 +140,26 @@ export const SignUp = () => {
             onChangeText={text => setAge(text)}
             style={styles.input}
           />
-          <Radio.Group
-            style={styles.radio}
-            name="Gender"
-            value={gender}
-            onChange={(nextValue) => {
-              setGender(nextValue);
-            }}
-          >
-            <Radio value="F" my="1">
-              Female
-            </Radio>
-            <Radio value="M" my="1">
-              Male
-            </Radio>
-            <Radio value="NB" my="1">
-              Nonbinary
-            </Radio>
-          </Radio.Group>
+          <Box pt={4}>
+            <Radio.Group
+              style={styles.radio}
+              name="Gender"
+              value={gender}
+              onChange={nextValue => {
+                setGender(nextValue);
+              }}
+            >
+              <Radio value="F" my="1">
+                Female
+              </Radio>
+              <Radio value="M" my="1">
+                Male
+              </Radio>
+              <Radio value="NB" my="1">
+                Nonbinary
+              </Radio>
+            </Radio.Group>
+          </Box>
         </View>
 
         <View style={styles.buttonContainer}>
@@ -186,6 +208,6 @@ const styles = StyleSheet.create({
   },
   radio: {
     justifyContent: 'center',
-    alignItems: 'left'
-  }
+    alignItems: 'left',
+  },
 });

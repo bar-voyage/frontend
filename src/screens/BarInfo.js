@@ -15,6 +15,7 @@ import {
 import { MaterialIcons } from '@expo/vector-icons';
 import { FaStar } from 'react-icons/fa';
 import * as ImagePicker from 'expo-image-picker';
+import { BlurView } from 'expo-blur';
 //import { launchImageLibrary } from 'react-native-image-picker';
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -75,18 +76,39 @@ export const BarInfo = ({ route, navigation }) => {
   const [filename, setFilename] = useState('');
   const [contentViewable, setContentViewable] = useState();
   const [location, setLocation] = useState();
+  const [errorMsg, setErrorMsg] = useState('');
+  const [currentBar, setCurrentBar] = useState({});
 
   React.useEffect(() => {
     AsyncStorage.getItem('user_id').then(value => {
+      // Get content view value from backend (0 = not viewable, 1 = viewable)
       axiosBackendInstance
         .post('/get_content_view', {
           user_id: value,
         })
         .then(response => {
-          console.log('content viewable: ', response.data.content_viewable);
-          setContentViewable(response.data.content_viewable === 1);
-          console.log('CONTENT_VIEWABLE', contentViewable);
-          if (contentViewable === false) {
+          const contentView = response.data.content_viewable;
+          console.log('content viewable (0 or 1): ', contentView);
+          if (contentView === 0) {
+            setShowAskForReviewModal(true);
+          }
+          setContentViewable(contentView === 1);
+        })
+        .catch(function (error) {
+          console.log('error!', error);
+        });
+
+      // Get user's current bar
+      axiosBackendInstance
+        .post('/get_current_bar', {
+          user_id: value,
+        })
+        .then(response => {
+          const currBar = response.data[0];
+          console.log('current bar: ', currBar);
+          setCurrentBar(currBar);
+          // Prompt user for photo review if they're checked in + if the bar they're looking at is different from their current checked in bar
+          if (contentViewable === false && bar_id !== currBar.bar_id) {
             setShowAskForReviewModal(true);
           }
         })
@@ -94,7 +116,9 @@ export const BarInfo = ({ route, navigation }) => {
           console.log('error!', error);
         });
     });
-  });
+  }, []);
+  console.log('CONTENT_VIEWABLE', contentViewable);
+  console.log('CURRENT BAR', currentBar);
 
   React.useEffect(() => {
     (async () => {
@@ -112,8 +136,8 @@ export const BarInfo = ({ route, navigation }) => {
 
   const sendCheckInRating = () => {
     let success = 0;
+    // Set current bar value to be bar id of place user is checking into
     AsyncStorage.getItem('user_id').then(user_id => {
-      /* TODO: update the current bar status */
       axiosBackendInstance
         .post('/set_current_bar', {
           bar_id: bar_id,
@@ -129,9 +153,30 @@ export const BarInfo = ({ route, navigation }) => {
         })
         .then(response => {
           success += 1;
-          console.log('update current bar response: ', response);
+          console.log('set current bar response: ', response);
         });
     });
+    // Set content view value to 0 (locked/not viewable) since user has checked in but not yet uploaded photos
+    AsyncStorage.getItem('user_id').then(user_id => {
+      axiosBackendInstance
+        .post('/set_content_view', {
+          content_view: 0,
+          user_id: user_id,
+        })
+        .catch(function (error) {
+          success -= 1;
+          console.log(error.toJSON());
+          toast.show({
+            title: 'Oops! Something went wrong',
+            status: 'error',
+            description: `Our team is working on it - please try again later!`,
+          });
+        })
+        .then(response => {
+          console.log('set content view response', response);
+        });
+    });
+    // Send star rating to backend
     AsyncStorage.getItem('user_id').then(user_id => {
       axiosBackendInstance
         .post('/rating', {
@@ -148,7 +193,7 @@ export const BarInfo = ({ route, navigation }) => {
           });
         })
         .then(response => {
-          console.log('response.data', response);
+          console.log('rating endpoint response', response);
           if (success > 0) {
             toast.show({
               title: 'Submitted',
@@ -165,6 +210,7 @@ export const BarInfo = ({ route, navigation }) => {
     AsyncStorage.getItem('user_id').then(user_id => {
       /* only upload if there's a picture there */
       if (image != null) {
+        console.log(bar_id, user_id, image, imagetype, filename);
         axiosBackendInstance
           .post('/upload_photo', {
             bar_id: bar_id,
@@ -186,7 +232,7 @@ export const BarInfo = ({ route, navigation }) => {
             success += 1;
           });
 
-        /* TODO: update content viewable if they uploaded a picture */
+        /* Update content viewable if they uploaded a picture */
         axiosBackendInstance
           .post('/set_content_view', {
             user_id: user_id,
@@ -204,7 +250,7 @@ export const BarInfo = ({ route, navigation }) => {
             console.log('set content view response', response);
             if (success > 0) {
               toast.show({
-                title: 'Submitted',
+                title: 'Uploaded successfully',
                 status: 'success',
                 description: `Thanks! We appreciate you 💛`,
               });
@@ -237,25 +283,6 @@ export const BarInfo = ({ route, navigation }) => {
 
   const onPressChooseBar = () => {
     setShowCheckInModal(true);
-    AsyncStorage.getItem('user_id').then(user_id => {
-      // set content view to 0 (blurred)
-      axiosBackendInstance
-        .post('/set_content_view', {
-          content_view: 0,
-          user_id: user_id,
-        })
-        .catch(function (error) {
-          console.log(error.toJSON());
-          toast.show({
-            title: 'Oops! Something went wrong',
-            status: 'error',
-            description: `Our team is working on it - please try again later!`,
-          });
-        })
-        .then(response => {
-          console.log('set content view response', response);
-        });
-    });
   };
 
   return (
@@ -340,7 +367,7 @@ export const BarInfo = ({ route, navigation }) => {
           </Modal.Footer>
         </Modal.Content>
       </Modal>
-      {/* Modal for part 2 review */}
+      {/* Modal for part 2 review: upload media content */}
       <Modal
         isOpen={showUploadContentModal}
         onClose={() => setShowUploadContentModal(false)}
@@ -349,7 +376,9 @@ export const BarInfo = ({ route, navigation }) => {
         <Modal.Content>
           <Modal.CloseButton />
           <Modal.Header>
-            <Text style={styles.modalHeader}> {name}</Text>
+            <Text style={styles.modalHeader}>
+              {currentBar ? currentBar.name : ''}
+            </Text>
           </Modal.Header>
           <Modal.Body>
             <Center>
@@ -395,8 +424,9 @@ export const BarInfo = ({ route, navigation }) => {
         </Modal.Content>
       </Modal>
       {/* Modal for uh oh review previous bar */}
+      {/* TODO: fix this modal wrongly appearing for user's current bar */}
       <Modal
-        isOpen={showAskForReviewModal}
+        isOpen={currentBar && showAskForReviewModal}
         onClose={() => {
           setShowAskForReviewModal(false);
           navigation.navigate('Map', location);
@@ -406,15 +436,16 @@ export const BarInfo = ({ route, navigation }) => {
         <Modal.Content>
           <Modal.CloseButton />
           <Modal.Header>
-            <Text style={styles.modalHeader}>Uh Oh!</Text>
+            <Text style={styles.modalHeader}>🔒 Uh Oh! 🔒</Text>
           </Modal.Header>
           <Modal.Body>
             <Center>
               <Box pt={8} pb={8} alignItems="center">
                 {/* <Box p="4" rounded="10" borderWidth={3} borderColor="#2596be"> */}
-                <Text style={styles.text} pt={4}>
-                  Upload photos/videos from your previous bar to unlock
-                  exclusive Bar Voyage content.
+                <Text style={styles.askforReviewText} pt={4}>
+                  Upload photos/videos from your currently checked-in bar{' '}
+                  <b>{currentBar ? currentBar.name : ''}</b> to unlock exclusive
+                  Bar Voyage content.
                 </Text>
                 {/* </Box> */}
               </Box>
@@ -426,15 +457,7 @@ export const BarInfo = ({ route, navigation }) => {
                 setShowUploadContentModal(true);
               }}
             >
-              <Text style={styles.submitButtonText}>Review</Text>
-            </Button>
-            <Button
-              onPress={() => {
-                setShowAskForReviewModal(false);
-                navigation.navigate('Map', location);
-              }}
-            >
-              <Text style={styles.submitButtonText}>Skip</Text>
+              <Text style={styles.submitButtonText}>Continue</Text>
             </Button>
           </Modal.Footer>
         </Modal.Content>
@@ -461,6 +484,9 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     fontSize: 24,
     fontWeight: 'bold',
+  },
+  askforReviewText: {
+    fontSize: 18,
   },
   uploadButton: {
     flex: 1,
