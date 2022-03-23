@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { TouchableOpacity } from 'react-native';
-import { Box, FlatList, Heading } from 'native-base';
+import { Box, FlatList, Heading, Spinner } from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import GetLocation from 'react-native-get-location';
+// import * as Location from 'expo-location';
 import MapView from 'react-native-web-maps';
 import { RecommendationCard } from '../components/RecommendationCard';
 import { axiosBackendInstance } from '../axios';
@@ -10,10 +10,9 @@ import { axiosBackendInstance } from '../axios';
 export const Map = ({ route, navigation }) => {
   console.log('ROUTE.PARAMS', route.params);
   const { coords, timestamp } = route.params;
-  console.log('coords', coords);
-  console.log('timestamp', timestamp);
   const [bars, setBars] = useState([]);
   console.log('bars in beginning', bars);
+  // const [location, setLocation] = useState();
 
   React.useEffect(() => {
     AsyncStorage.getItem('user_id').then(value => {
@@ -28,23 +27,21 @@ export const Map = ({ route, navigation }) => {
           console.log('BARS', bars);
         });
     });
-    // getBars();
   }, []);
 
-  // const getBars = () => {
-  //   AsyncStorage.getItem('user_id').then(value => {
-  //     console.log('user_id value', value);
-  //     axiosBackendInstance
-  //       .post('/rec_bars', {
-  //         user_id: value,
-  //       })
-  //       .then(response => {
-  //         console.log('getRecBars response.data', response.data);
-  //         setBars(response.data);
-  //         console.log('BARS', bars);
-  //       });
-  //   });
-  // };
+  // React.useEffect(() => {
+  //   (async () => {
+  //     let { status } = await Location.requestForegroundPermissionsAsync();
+  //     if (status !== 'granted') {
+  //       setErrorMsg('Permission to access location was denied');
+  //       return;
+  //     }
+
+  //     let location = await Location.getCurrentPositionAsync({});
+  //     setLocation(location);
+  //     console.log('location in Survey.js', location);
+  //   })();
+  // });
 
   return (
     <>
@@ -55,8 +52,11 @@ export const Map = ({ route, navigation }) => {
           md: '25%',
         }}
       >
+        {/* {location ? ( */}
         <MapView
           initialRegion={{
+            // latitude: location.coords.latitude,
+            // longitude: location.coords.longitude,
             latitude: coords.latitude,
             longitude: coords.longitude,
             latitudeDelta: 0.04,
@@ -66,12 +66,18 @@ export const Map = ({ route, navigation }) => {
           {bars.map((bar, index) => (
             <MapView.Marker
               key={index}
-              coordinate={{ latitude: bar.latitude, longitude: bar.longitude }}
+              coordinate={{
+                latitude: bar.latitude,
+                longitude: bar.longitude,
+              }}
               title={bar.name}
               // description={marker.description}
             />
           ))}
         </MapView>
+        {/* ) : ( */}
+        {/* <Spinner size="lg" /> */}
+        {/* )} */}
       </Box>
       <Box
         h="100%"
