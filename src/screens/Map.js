@@ -68,7 +68,7 @@ export const Map = ({ route, navigation }) => {
               key={index}
               coordinate={{ latitude: bar.latitude, longitude: bar.longitude }}
               title={bar.name}
-              // description={marker.description}
+            // description={marker.description}
             />
           ))}
         </MapView>

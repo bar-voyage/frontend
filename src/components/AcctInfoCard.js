@@ -10,35 +10,22 @@ import {
 } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 
+
 export const AcctInfoCard = props => {
-    const { cat, value } = props;
+    const { cat, value, changeEmail, changePassword } = props;
 
-    const currentPassword = '123456'
-    const newEmail = 'll@jstreet'
+    const new_password = 'lolzthisisfun'
+    const new_email = 'cng227@gmail.com'
+    const curr_password = '123456'
 
-
-    const changeEmail = (currentPassword, newEmail) => {
-        this.reauthenticate(currentPassword).then(() => {
-            var user = firebase.auth().currentUser;
-            user.updateEmail(newEmail).then(() => {
-                console.log("Email updated!");
-            }).catch((error) => { console.log(error); });
-        }).catch((error) => { console.log(error); });
-
-        React.useEffect(() => {
-            AsyncStorage.getItem('user_id').then(value => {
-                console.log('user_id value', value);
-                axiosBackendInstance
-                    .post('/change_password', {
-                        user_id: value,
-                    })
-                    .then(response => {
-                        console.log('password change response.data', response.data);
-                        setPassword(response.data);
-                    });
-            });
-        }, []);
+    function get_cat(category) {
+        if (category == 'Update Email:') {
+            changeEmail(curr_password, new_email);
+        } else if (category == 'Update Password:') {
+            changePassword(curr_password, new_password);
+        }
     }
+
 
     return (
         <Box
@@ -61,8 +48,8 @@ export const AcctInfoCard = props => {
                         bold
                     >
                         {cat}
+
                     </Text>
-                    {/* <Spacer /> */}
                     <Text
                         fontSize="lg"
                         _dark={{
@@ -71,7 +58,7 @@ export const AcctInfoCard = props => {
                         color="coolGray.800"
                         alignSelf='flex-start'
 
-                        onPress={() => changeEmail(currentPassword, newEmail)}
+                        onPress={() => { get_cat(cat) }}
                     >
 
                         {value}

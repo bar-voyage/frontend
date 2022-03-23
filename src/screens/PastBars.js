@@ -40,28 +40,21 @@ export const PastBars = ({ navigation }) => {
           Your Past Bars
         </Heading>
 
-        <View>
-          {bars == null ?
-            (<FlatList
+        <FlatList
 
-              data={bars}
-              renderItem={({ item }) => (
+          data={bars}
+          renderItem={({ item }) => (
 
-                <RecommendationCard
-                  name={item.name}
-                  avgStars={item.rating}
-                  imageUrl={item.img_url}
+            <RecommendationCard
+              name={item.name}
+              avgStars={item.avg_stars}
+              imageUrl={item.img_url}
 
-                />
-              )}
-              keyExtractor={item => item.bar_id}
-            />)
+            />
+          )}
+          keyExtractor={item => item.bar_id}
+        />)
 
-            :
-
-            (<Text> No Past Bars to View </Text>)
-          }
-        </View>
 
 
       </Box>
