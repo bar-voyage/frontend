@@ -8,21 +8,25 @@ import {
     Text,
     Spacer,
 } from 'native-base';
+import { SafeAreaView, StyleSheet, TextInput, View, Button } from "react-native";
 import { MaterialIcons } from '@expo/vector-icons';
+import { style } from 'styled-system';
 
 
 export const AcctInfoCard = props => {
-    const { cat, value, changeEmail, changePassword } = props;
+    const { cat, value, changeEmail, changePassword, childToParent } = props;
 
-    const new_password = 'lolzthisisfun'
-    const new_email = 'cng227@gmail.com'
-    const curr_password = '123456'
+    const [new_value, setUpdate] = React.useState('');
+    const password = '123456';
 
-    function get_cat(category) {
+    const get_cat = (category, curr_password, update_value) => {
         if (category == 'Update Email:') {
-            changeEmail(curr_password, new_email);
-        } else if (category == 'Update Password:') {
-            changePassword(curr_password, new_password);
+            console.log('update:', update_value);
+            changeEmail(curr_password, update_value);
+        }
+
+        if (category == 'Update Password:') {
+            changePassword(curr_password, update_value);
         }
     }
 
@@ -50,23 +54,56 @@ export const AcctInfoCard = props => {
                         {cat}
 
                     </Text>
-                    <Text
-                        fontSize="lg"
-                        _dark={{
-                            color: 'warmGray.50',
-                        }}
-                        color="coolGray.800"
-                        alignSelf='flex-start'
 
-                        onPress={() => { get_cat(cat) }}
-                    >
+                    {/* <Text onPress={() => { get_cat(cat, new_value) }}> */}
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={text => setUpdate(text)}
+                        value={new_value}
+                        placeholder={value}
+                        keyboardType="default"
+                    />
 
-                        {value}
-                    </Text>
+                    {/* </Text> */}
+
+                    {/* <Button onPress={() => { get_cat(cat, password, value) }} style={styles.button}>
+                        <Text style={styles.buttonText}> Submit Changes </Text>
+                    </Button> */}
 
                 </VStack>
                 {/* <Spacer /> */}
             </HStack>
+
+
         </Box>
+
+
     );
+
+
 };
+
+const styles = StyleSheet.create({
+    input: {
+        height: 40,
+        margin: 12,
+        borderWidth: 1,
+        padding: 10,
+    },
+    buttonContainer: {
+        width: '80%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 50,
+    },
+    button: {
+        width: '100%',
+        alignItems: 'center',
+    },
+    buttonText: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 20,
+        paddingVertical: 15,
+    },
+});
