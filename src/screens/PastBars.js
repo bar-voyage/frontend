@@ -47,7 +47,7 @@ export const PastBars = ({ navigation }) => {
 
             <RecommendationCard
               name={item.name}
-              avgStars={item.avg_stars}
+              avgStars={item.stars}
               imageUrl={item.img_url}
 
             />

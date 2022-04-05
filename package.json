@@ -55,7 +55,8 @@
     "react-native-web": "0.17.1",
     "react-native-web-maps": "^0.3.0",
     "styled-components": "^5.3.3",
-    "styled-system": "^5.1.5"
+    "styled-system": "^5.1.5",
+    "expo-blur": "~10.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
