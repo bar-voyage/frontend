@@ -50,6 +50,7 @@ export const BarInfoComponent = props => {
       });
   }, []);
 
+
   return (
     <Container>
       <VStack space={4} pt={8} pb={4}>
