@@ -57,7 +57,7 @@ export const Survey = ({ navigation }) => {
 
   return (
     <Center height="100%">
-      <Heading size="xl">Hey {username}!</Heading>
+      <Heading size="xl">Hey Barb!</Heading>
       <Heading size="lg">What are the vibes for tonight?</Heading>
       <Checkbox.Group
         onChange={setGroupValues}
