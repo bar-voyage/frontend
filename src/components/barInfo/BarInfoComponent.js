@@ -106,7 +106,7 @@ export const BarInfoComponent = props => {
                   }}
                   alt="Photo of xyz"
                   size="xl"
-                  blurRadius={contentViewable ? 0 : 5}
+                  // blurRadius={contentViewable ? 0 : 5}
                 />
               </HStack>
             ))}

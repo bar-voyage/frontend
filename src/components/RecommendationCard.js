@@ -66,7 +66,7 @@ export const RecommendationCard = props => {
           </Box>
         </VStack>
         <Spacer />
-        <Text
+        {/* <Text
           fontSize="sm"
           _dark={{
             color: 'warmGray.50',
@@ -75,7 +75,7 @@ export const RecommendationCard = props => {
           alignSelf="flex-start"
         >
           {distance}
-        </Text>
+        </Text> */}
       </HStack>
     </Box>
   );

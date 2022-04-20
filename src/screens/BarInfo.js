@@ -211,7 +211,7 @@ export const BarInfo = ({ route, navigation }) => {
       if (image != null) {
         axiosBackendInstance
           .post('/upload_photo', {
-            bar_id: bar_id,
+            bar_id: currentBar.bar_id,
             user_id: user_id,
             photo: image,
             phototype: imagetype,

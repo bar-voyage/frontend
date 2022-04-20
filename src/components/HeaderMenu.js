@@ -30,7 +30,7 @@ export const HeaderMenu = () => {
   };
 
   const handleSettings = () => {
-      navigation.navigate('Settings');
+    navigation.navigate('Settings');
   };
 
   return (
@@ -44,7 +44,7 @@ export const HeaderMenu = () => {
       }}
     >
       <Menu.Item isDisabled>
-        <Text style={styles.user}>🤩 &nbsp; {username}</Text>
+        <Text style={styles.user}>🤩 &nbsp; Barb</Text>
       </Menu.Item>
       <Menu.Item isDisabled={auth.currentUser}>
         <Pressable onPress={handleLogout}>
@@ -53,7 +53,7 @@ export const HeaderMenu = () => {
       </Menu.Item>
       <Divider />
       <Menu.Item>
-      <Pressable onPress={handleSettings}>
+        <Pressable onPress={handleSettings}>
           <Text>Settings</Text>
         </Pressable>
       </Menu.Item>
