@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  Badge,
   Box,
   Image,
   Heading,
@@ -54,6 +55,18 @@ export const BarInfoComponent = props => {
     <Container>
       <VStack space={4} pt={8} pb={4}>
         <Heading size="xl">{bar.name}</Heading>
+
+        <VStack space={2}>
+          <HStack space={3}>
+            <Badge>good music</Badge>
+            <Badge>crowded</Badge>
+            <Badge>loud</Badge>
+          </HStack>
+          <HStack space={3}>
+            <Badge colorScheme="info">cover charge</Badge>
+            <Badge colorScheme="info">short line</Badge>
+          </HStack>
+        </VStack>
 
         <DetailsRow iconName="location-pin" details={address} />
         <Divider my={-2} />
