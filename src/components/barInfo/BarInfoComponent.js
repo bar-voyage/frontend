@@ -21,7 +21,7 @@ export const BarInfoComponent = props => {
   const address = `${bar.address}, ${bar.city}, ${bar.state} ${bar.zip}`;
   const [photos, setPhotos] = useState([]);
   const [contentViewable, setContentViewable] = useState(null);
-  // const [adjectives, setAdjectives] = useState([]);
+  const [adjectives, setAdjectives] = useState([]);
 
   React.useEffect(() => {
     AsyncStorage.getItem('user_id').then(value => {
@@ -51,17 +51,17 @@ export const BarInfoComponent = props => {
         console.log('No photos');
       });
 
-    // axiosBackendInstance
-    //   .post('/get_adj', {
-    //     bar_id: bar.bar_id,
-    //   })
-    //   .then(response => {
-    //     console.log('get_adj response.data', response.data);
-    //     setAdjectives(response.data);
-    //   })
-    //   .catch(function (error) {
-    //     console.log('error retrieving adjectives');
-    //   });
+    axiosBackendInstance
+      .post('/get_adj', {
+        bar_id: bar.bar_id,
+      })
+      .then(response => {
+        console.log('get_adj response.data', response.data);
+        setAdjectives(response.data);
+      })
+      .catch(function (error) {
+        console.log(error, 'error retrieving adjectives');
+      });
   }, []);
 
   return (
@@ -71,12 +71,9 @@ export const BarInfoComponent = props => {
 
         <VStack space={2}>
           <HStack space={3}>
-            {/* {adjectives.map(adj => (
+            {adjectives.map(adj => (
               <Badge>{adj}</Badge>
-            ))} */}
-            <Badge>good music</Badge>
-            <Badge>crowded</Badge>
-            <Badge>loud</Badge>
+            ))}
           </HStack>
           <HStack space={3}>
             <Badge colorScheme="info">cover charge</Badge>
@@ -113,50 +110,6 @@ export const BarInfoComponent = props => {
                 />
               </HStack>
             ))}
-
-            {/* 
-
-            <HStack space={3}>
-              <Image
-                source={{
-                  //uri: 'https://gwtoday.gwu.edu/sites/g/files/zaxdzs1531/f/styles/gw_editorial_article_full/public/image/SEH17_SEH_UP_2015-WLA_6446_1080x.jpg?itok=9egdRwXz',
-                  uri: photos[0] != undefined ? photos[0] : 'https://gwtoday.gwu.edu/sites/g/files/zaxdzs1531/f/styles/gw_editorial_article_full/public/image/SEH17_SEH_UP_2015-WLA_6446_1080x.jpg?itok=9egdRwXz',
-                }}
-                alt="Photo of xyz"
-                size="xl"
-                blurRadius={blurRadius}
-              />
-
-              <Image
-                source={{
-                  uri: 'https://s3-media3.fl.yelpcdn.com/bphoto/7jr8YBqSzqG6fPGF6LmNrw/o.jpg',
-                  // uri: bar.imageLinks[1],
-                }}
-                alt="Photo of xyz"
-                size="xl"
-                blurRadius={blurRadius}
-              />
-            </HStack>
-            <HStack space={3}>
-              <Image
-                source={{
-                  uri: 'https://www.washingtonian.com/wp-content/uploads/2017/01/MG_0098.jpg',
-                  // uri: bar.imageLinks[2],
-                }}
-                alt="Photo of xyz"
-                size="xl"
-                blurRadius={blurRadius}
-              />
-              <Image
-                source={{
-                  uri: 'https://z0sqrs-a.akamaihd.net/3207-mcguiresirishpub/images/display-records/galleries/pensacola-packed-bar.jpg',
-                  // uri: bar.imageLinks[3],
-                }}
-                alt="Photo of xyz"
-                size="xl"
-                blurRadius={blurRadius}
-              />
-            </HStack> */}
           </VStack>
         </Stack>
         <Box alignItems="center" pt={8}>
