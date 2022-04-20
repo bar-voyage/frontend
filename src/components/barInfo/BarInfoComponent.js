@@ -21,6 +21,7 @@ export const BarInfoComponent = props => {
   const address = `${bar.address}, ${bar.city}, ${bar.state} ${bar.zip}`;
   const [photos, setPhotos] = useState([]);
   const [contentViewable, setContentViewable] = useState(null);
+  // const [adjectives, setAdjectives] = useState([]);
 
   React.useEffect(() => {
     AsyncStorage.getItem('user_id').then(value => {
@@ -49,6 +50,18 @@ export const BarInfoComponent = props => {
       .catch(function (error) {
         console.log('No photos');
       });
+
+    // axiosBackendInstance
+    //   .post('/get_adj', {
+    //     bar_id: bar.bar_id,
+    //   })
+    //   .then(response => {
+    //     console.log('get_adj response.data', response.data);
+    //     setAdjectives(response.data);
+    //   })
+    //   .catch(function (error) {
+    //     console.log('error retrieving adjectives');
+    //   });
   }, []);
 
   return (
@@ -58,6 +71,9 @@ export const BarInfoComponent = props => {
 
         <VStack space={2}>
           <HStack space={3}>
+            {/* {adjectives.map(adj => (
+              <Badge>{adj}</Badge>
+            ))} */}
             <Badge>good music</Badge>
             <Badge>crowded</Badge>
             <Badge>loud</Badge>
