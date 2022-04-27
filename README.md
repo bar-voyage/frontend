@@ -16,8 +16,8 @@ GW Senior Design
 6. `npm install` to install all packages and dependencies
 7. `npm start`
 8. Developer tools should begin running at http://localhost:19002/
-9. Scan the QR code (using the camera app on iOS) displayed in the terminal or on localhost
-10. You should now be able to see the app running on your physical device via the Expo Go app! 🥳
+9. Click View in Web Browser on the side panel of the developer tools page
+10. You should now be able to see the app running in your web browser! 🥳
 
 Reference: [Official React Native environment setup documentation](https://reactnative.dev/docs/environment-setup)
 
