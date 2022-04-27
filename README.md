@@ -11,13 +11,12 @@ GW Senior Design
 
 3. Install [Expo CLI](https://docs.expo.dev/workflow/expo-cli/) command line utility:
    `npm install -g expo-cli`
-4. Download the [Expo Go](https://expo.dev/client) app on your phone and connect to the same wireless network as your computer
-5. cd into bar-voyage project root directory
-6. `npm install` to install all packages and dependencies
-7. `npm start`
-8. Developer tools should begin running at http://localhost:19002/
-9. Click View in Web Browser on the side panel of the developer tools page
-10. You should now be able to see the app running in your web browser! 🥳
+4. cd into frontend project root directory
+5. `npm install` to install all packages and dependencies
+6. `npm start`
+7. Developer tools should begin running on a localhost url such as http://localhost:19002/
+8. Click View in Web Browser on the side panel of the developer tools page
+9. You should now be able to see the app running in your web browser! 🥳
 
 Reference: [Official React Native environment setup documentation](https://reactnative.dev/docs/environment-setup)
 
